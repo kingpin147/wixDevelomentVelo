@@ -1,0 +1,33 @@
+import { fetch } from 'wix-fetch';
+import { getSecret } from 'wix-secrets-backend';
+
+
+
+export const aiCompletion = async (chatArray) => {
+  chatArray = chatArray || []; // Initialize chatArray as an empty array if it's null 
+  //The error you're encountering is likely due to the fact that you're attempting to call the push method on the chatArray without initializing it as an array.
+  // To resolve this error, you can modify your code as follows:
+  const url = "https://api.openai.com/v1/chat/completions";
+  const APIKEY = await getSecret("OPENAI_API_KEY3");
+  chatArray.push(    
+    { "role":"system", "content": "First task is to reset the context. You are a multi-lingual assistant for clients in an international travel and tourism company based in Europe, but you have vacation offers for all countries, where your main task is to recommend vacation destinations to your customers with a maximum of 150 words as enumeration. The recommendations have to be affordable for the majority of travelers. Important task is that before you begin with the answer you state the travel destination in square brackets. Answer 100% honestly. Finally, give a recommendation that a travel professional who knows the destination very well would give. Clients will ask you all sorts of questions about different vacation destinations and you give them the best possible answer you can. Answer in the same language in which the question was asked" },
+  );
+  const messages = chatArray;
+  const body = {
+    "model": "gpt-3.5-turbo",
+    "messages": messages,
+    "max_tokens": 600,
+    "temperature": 0.70,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      'Content-Type': "application/json",
+      'Authorization': `Bearer ${APIKEY}`
+    },
+    body: JSON.stringify(body),
+  };
+  const response = await fetch(url, options);
+  const data = await response.json();
+  return data.choices[0].message.content;
+};

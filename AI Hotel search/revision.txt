@@ -1,0 +1,111 @@
+import { aiCompletion } from 'backend/ChatGPTInegration.jsw';
+import wixWindow from 'wix-window';
+import { getImages } from 'backend/PixabayVersuchIntegartionALA.jsw';
+
+let location;
+let words;
+let chatArray = [];
+
+let countries = [
+  "Russia",  "Germany",  "United Kingdom",  "France",  "Italy",  "Spain",  "Ukraine",  "Poland",  "Romania",  "Netherlands",  "Belgium",
+  "Czechia",  "Greece",  "Portugal",  "Sweden",  "Hungary",  "Belarus",  "Austria",  "Serbia",  "Switzerland",  "Bulgaria",  "Denmark",
+  "Finland",  "Slovakia",  "Norway",  "Ireland",  "Croatia",  "Moldova",  "Bosnia and Herzegovina",  "Albania",  "Lithuania",  "North Macedonia",
+  "Slovenia",  "Latvia",  "Kosovo",  "Estonia",  "Montenegro",  "Luxembourg",  "Malta",  "Iceland",  "Andorra",  "Monaco",  "Liechtenstein",  
+  "San Marino",  "Holy See"
+];
+
+async function askQuestion() {
+  $w("#loadingSpinner").show();
+  const userPrompt = $w("#promptInput").value;
+  const language = $w('#languageDropdown').value;
+
+  chatArray.push({ role: "user", content: `Here is the client's question: ${userPrompt}. Answer the question in ${language}` });
+
+  const answer = await aiCompletion(chatArray);
+  $w('#answerBox').value = answer + "\n\nHave fun on your trip and best regards,\n\nYour Ki-Urlaub.de team\n\n";
+
+  chatArray.push({ role: "assistant", content: `${answer}.` });
+
+  words = answer.split(" ");
+  
+
+  $w('#loadingSpinner').hide();
+
+  
+  
+}
+/*
+function getLocation(words) {
+  return words[0] + ' ' + words[1];
+}*/
+
+async function updateImageAndBackground() {
+  location = getRandomCountry();
+  const imgSrc = await getImages(location);
+  $w('#column2').background.src = imgSrc;
+}
+
+function getRandomCountry() {
+  const randomIndex = Math.floor(Math.random() * countries.length);
+  return countries[randomIndex];
+}
+
+$w.onReady(function () {
+  $w("#askButton").disable();
+
+  $w("#captcha").onVerified(() => {
+    $w("#askButton").enable();
+    $w('#captcha').collapse();
+  });
+
+  $w('#askButton').onClick(() => {
+    // Call the function to update image and background
+    updateImageAndBackground();
+    askQuestion();
+  });
+});
+
+export function lightboxButton_click(event) {
+  const dataToSend = {
+    generation: $w('#answerBox').value,
+    question: $w('#promptInput').value
+  };
+  wixWindow.openLightbox("Ki-Vorschlag merken", dataToSend);
+}
+
+
+
+
+/////
+
+
+import { fetch } from 'wix-fetch';
+import { getSecret } from 'wix-secrets-backend';
+
+let chatArray=[];
+
+export const aiCompletion = async (chatArray) => {
+  chatArray = chatArray || [];
+  const url = "https://api.openai.com/v1/chat/completions";
+  const APIKEY = await getSecret("OPENAI_API_KEY3");
+  chatArray.push({ "role": "system", "content": "First task is to reset the context. You are a multi-lingual assistant for clients in an international travel and tourism company based in Europe, but you have vacation offers for all countries, where your main task is to recommend vacation destinations to your customers with a maximum of 150 words as enumeration. The recommendations have to be affordable for the majority of travelers. Important task is that before you begin with the answer you state the travel destination in square brackets. Answer 100% honestly. Finally, give a recommendation that a travel professional who knows the destination very well would give. Clients will ask you all sorts of questions about different vacation destinations and you give them the best possible answer you can. Answer in the same language in which the question was asked" });
+  const messages = chatArray;
+  const body = {
+    "model": "gpt-3.5-turbo",
+    "messages": messages,
+    "max_tokens": 200,
+    "temperature": 0.70,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      'Content-Type': "application/json",
+      'Authorization': `Bearer ${APIKEY}`
+    },
+    body: JSON.stringify(body),
+  };
+
+  const response = await fetch(url, options);
+  const data = await response.json();
+  return data.choices[0].message.content;
+};

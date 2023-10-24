@@ -1,0 +1,436 @@
+import wixUsers from 'wix-users';
+import wixLocation from 'wix-location';
+import wixData from 'wix-data';
+import { registerUserBackend } from 'backend/register'
+
+let toInsert = {}
+let firstName = "";
+let lastName = "";
+let email = "";
+let password1 = "";
+let password2 = "";
+let nativeLang = "";
+let nativeAccent = "";
+let otherLang = "";
+let english;
+let impressions = "";
+let recording = "";
+let keywords = "";
+let description = "";
+let audition;
+let demo1;
+let demo1type;
+let demo2;
+let demo2type;
+let demo3;
+let demo3type;
+let demo4;
+let demo4type;
+let demo5;
+let demo5type;
+let demo6;
+let demo6type;
+let avi;
+let gender = "";
+let approved = true;
+
+$w.onReady(() => {
+
+});
+
+function registerUser() {
+    let firstName = $w("#firstNameInput").value
+    let lastName = $w("#lastNameInput").value
+    let email = $w("#emailInput").value
+    let password = $w("#password1").value
+
+    if (password1 === password2 || password2 === password1) {
+        registerUserBackend(email, password, firstName, lastName)
+            .then((result) => {
+                console.log("Registered!");
+                console.log(result);
+                if (result.approved) {
+                    // log the user in
+                    wixUsers.applySessionToken(result.sessionToken).then((data) => {
+                        console.log(data)
+                        wixUsers.login(email, password)
+                            .then(() => {
+                                console.log("User is logged in");
+                                let user = wixUsers.currentUser;
+                                let userID = user.id;
+                                let isLoggedIn = user.loggedIn;
+                                insertUser(user, userID, isLoggedIn);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    })
+                } else {
+                    console.log("Not approved!");
+                    $w("#error").text = "Error: User Not Approved!";
+                    $w("#error").show();
+                }
+            });
+    } else {
+        $w("#error").text = "Error: Passwords do not match!";
+        $w("#error").show();
+    }
+}
+
+function insertUser(user, userID, isLoggedIn) {
+    if (password1 === password2 || password2 === password1) {
+        toInsert = {
+            "firstName": firstName,
+            "lastName": lastName,
+            "email": email,
+            "password": password1,
+            "gender": gender,
+            "yourNativeLanguage": nativeLang,
+            "yourNativeAccent": nativeAccent,
+            "fluentInEnglish": english,
+            "otherFluentLanguages": otherLang,
+            "impressions": impressions,
+            "keywords": keywords,
+            "description": description,
+            "avatarPhoto": avi,
+            "audition": audition,
+            "recordingSetUp": recording,
+            "demo1Name": demo1type,
+            "demo1": demo1,
+            "demo2Name": demo2type,
+            "demo2": demo2,
+            "demo3Name": demo3type,
+            "demo3": demo3,
+            "demo4Name": demo4type,
+            "demo4": demo4,
+            "demo5Name": demo5type,
+            "demo5": demo5,
+            "demo6Name": demo6type,
+            "demo6": demo6,
+            "approved": approved
+        }
+        console.log(toInsert);
+
+        wixData.insert("VoiceArtists", toInsert)
+            .then((results) => {
+                console.log(results);
+                wixData.insertReference("VoiceArtists", "connectedProfile", results._id, userID)
+                    .then((data) => {
+                        console.log("Data: ")
+                        console.log(data)
+                        console.log(results._id)
+                        console.log(userID)
+                        console.log("User Successfully Linked");
+                        console.log("made it here");
+                        $w("#success").text = "Thank you for registering with FlyVoiceovers, your profile is now live! Please make a note of your login details. You will find the login link in the website's footer in order to make future updates"
+                        $w("#success").show()
+                        wixLocation.to(`https://www.flyvoiceovers.com/voiceartist/${results._id}`);
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+
+    } else {
+        $w("#error").text = "Error: Passwords do not match!";
+        $w("#error").show();
+    }
+
+}
+
+export function signUp_click(event) {
+    registerUser()
+}
+
+export function demo1Btn_change(event) {
+    $w("#demo1Btn").fileType = "Audio";
+    $w("#demo1Btn").startUpload()
+        .then((uploadedFile) => {
+            demo1 = uploadedFile.url;
+            console.log(demo1);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demo2Btn_change(event) {
+    $w("#demo2Btn").fileType = "Audio";
+    $w("#demo2Btn").startUpload()
+        .then((uploadedFile) => {
+            demo2 = uploadedFile.url;
+            console.log(demo2);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demo3Btn_change(event) {
+    $w("#demo3Btn").fileType = "Audio";
+    $w("#demo3Btn").startUpload()
+        .then((uploadedFile) => {
+            demo3 = uploadedFile.url;
+            console.log(demo3);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demoType_change(event) {
+    demo1type = $w("#demoType").value
+}
+
+export function demoType2_change(event) {
+    demo2type = $w("#demoType2").value
+}
+
+export function demoType3_change(event) {
+    demo3type = $w("#demoType3").value
+}
+
+export function firstNameInput_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        firstName = $w("#firstNameInput").value
+    }, 200);
+}
+
+export function lastNameInput_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        lastName = $w("#lastNameInput").value
+    }, 200);
+}
+
+export function emailInput_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        email = $w("#emailInput").value
+    }, 200);
+}
+
+export function password1_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        password1 = $w("#password1").value
+    }, 200);
+}
+
+export function password2_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        password2 = $w("#password2").value
+    }, 200);
+}
+
+export function nativeLang_change(event) {
+    nativeLang = $w("#nativeLang").value;
+}
+
+export function nativeAccent_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        nativeAccent = $w("#nativeAccent").value
+    }, 200);
+}
+
+// export function otherLang_change(event) {
+// 	otherLang = $w("#otherLang").value
+// }
+
+export function english_click(event) {
+    english = $w("#english").value;
+    console.log(english)
+}
+
+export function impressions_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        impressions = $w("#impressions").value
+    }, 200);
+}
+
+export function recordingSetup_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        recording = $w("#recordingSetup").value
+    }, 200);
+}
+
+export function keywords_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        keywords = $w("#keywords").value
+    }, 200);
+
+}
+
+export function description_keyPress(event) {
+    let debounceTimer;
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        description = $w("#description").value
+    }, 200);
+}
+
+// export function audiotionBtn_change(event) {
+// 	$w("#audiotionBtn").fileType = "Audio";
+//     $w("#audiotionBtn").startUpload()
+//         .then((uploadedFile) => {
+//             audition = uploadedFile.url; 
+//             console.log(audition);
+//         })
+//         .catch((uploadError) => {
+//             let errCode = uploadError.errorCode; // 7751
+//             let errDesc = uploadError.errorDescription; // "Error description"
+//         });  
+// }
+
+export function aviBtn_change(event) {
+    $w("#aviBtn").fileType = "image";
+    $w("#aviBtn").startUpload()
+        .then((uploadedFile) => {
+            avi = uploadedFile.url;
+            console.log(avi);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+/**
+*	Adds an event handler that runs when an input element's value
+ is changed.
+*	 @param {$w.Event} event
+*/
+export function demo6Btn_change(event) {
+    $w("#demo6Btn").fileType = "Audio";
+    $w("#demo6Btn").startUpload()
+        .then((uploadedFile) => {
+            demo6 = uploadedFile.url;
+            console.log(demo6);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+/**
+*	Adds an event handler that runs when an input element's value
+ is changed.
+*	 @param {$w.Event} event
+*/
+export function demo5Btn_change(event) {
+    $w("#demo5Btn").fileType = "Audio";
+    $w("#demo5Btn").startUpload()
+        .then((uploadedFile) => {
+            demo5 = uploadedFile.url;
+            console.log(demo5);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+/**
+*	Adds an event handler that runs when an input element's value
+ is changed.
+*	 @param {$w.Event} event
+*/
+export function demoType6_change(event) {
+    demo6type = $w("#demoType6").value
+}
+
+/**
+*	Adds an event handler that runs when an input element's value
+ is changed.
+*	 @param {$w.Event} event
+*/
+export function demoType5_change(event) {
+    demo5type = $w("#demoType5").value
+}
+
+/**
+*	Adds an event handler that runs when an input element's value
+ is changed.
+*	 @param {$w.Event} event
+*/
+export function demoType4_change(event) {
+    demo4type = $w("#demoType4").value
+}
+
+/**
+*	Adds an event handler that runs when an input element's value
+ is changed.
+*	 @param {$w.Event} event
+*/
+export function demo4Btn_change(event) {
+    $w("#demo4Btn").fileType = "Audio";
+    $w("#demo4Btn").startUpload()
+        .then((uploadedFile) => {
+            demo4 = uploadedFile.url;
+            console.log(demo4);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function gender_change(event) {
+    gender = $w("#gender").value;
+}
+
+export function english_change(event) {
+    english = $w("#english").value;
+}

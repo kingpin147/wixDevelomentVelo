@@ -1,0 +1,14 @@
+ $w('#clearSearch').onClick(() => {
+ 
+        $w("#Search").value = undefined
+        $w("#dataset1").setFilter(wixData.filter())
+ 
+        $w("#clearSearch").hide();
+ 
+    })
+ $w('#Search').onKeyPress(event => {
+    if (event.key === "Enter") {
+      // Enter key is pressed
+      // Perform your desired action here
+      console.log("Enter key pressed");
+    }

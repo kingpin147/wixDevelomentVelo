@@ -1,0 +1,15 @@
+/**************************
+ * backend code - wix pay.jsw *
+ ************************/
+
+import wixPayBackend from 'wix-pay-backend';
+
+export function createMyPayment(productname,price) {
+  return wixPayBackend.createPayment({
+    items: [{
+      name: productname,
+      price: price
+    }],
+    amount: price
+  });
+}

@@ -1,0 +1,444 @@
+let totalOnetimeMasters = 0;
+let TotalMastersExpenses = 0;
+let TotalIncomeDuringMasters = 0;
+let totalIncomeDuringJob = 0;
+let roi = 0;
+let BreakEvenPoint = 0;
+let SavingAfter3Years = 0;
+let SavingAfter5Years = 0;
+
+let year1 = 0;
+let year2 = 0;
+let year3 = 0;
+let year4 = 0;
+let year5 = 0;
+let year6 = 0;
+let year7 = 0;
+let fulltimeSalary1 = 0;
+let fullTimeSalaryYear2 = 0;
+let fullTimeSalaryYear3 = 0; 
+let fullTimeSalaryYear4 = 0;
+let fullTimeSalaryYear5 = 0;
+let fullTimeSalaryYear6 = 0;
+let fullTimeSalaryYear7 = 0;
+
+
+
+// Form page 1 code start
+function calculateOneTimeTotal() {
+     const applicationFees = Number($w('#input19').value) || 0;
+    const gre = Number($w('#input16').value) || 0;
+    const toefl = Number($w('#input18').value) || 0;
+    const visaFees = Number($w('#input15').value) || 0;
+    const flight = Number($w('#input17').value) || 0;
+    totalOnetimeMasters = applicationFees + gre + toefl + visaFees + flight;
+    $w('#text64').text = `Total Amount: $${totalOnetimeMasters}`;
+}
+
+// Onchange flight calculate and display page 1 results
+export function input17_change(event) {
+    calculateOneTimeTotal();
+    $w('#text64').show();
+}
+
+export function input19_change(event) {
+    calculateOneTimeTotal();
+    $w('#text64').show();
+}
+
+export function input16_change(event) {
+    calculateOneTimeTotal();
+    $w('#text64').show();
+}
+
+export function input18_change(event) {
+    calculateOneTimeTotal();
+    $w('#text64').show();
+}
+
+export function input15_change(event) {
+    calculateOneTimeTotal();
+    $w('#text64').show();
+}
+//form page 2 code start
+function calculateMastersExpenceTotal() {
+    const courseDuration = Number($w('#input24').value) ;
+    const EntireFee = Number($w('#slider1').value) ;
+    const Rent = Number($w('#slider2').value) ;
+    const Utilities = Number($w('#slider3').value)  ;
+    const Grocery = Number($w('#slider4').value) ;
+    const Miscelleaneous = Number($w('#slider5').value);
+    const EarningPerMonth = Number($w('#slider6').value) ;
+    const LoanAmount = Number($w('#slider7').value) ;
+    const InterestRate = Number($w('#slider8').value) ;
+    const JobSalary = Number($w('#slider9').value) ;
+    const JobMonth = Number($w('#slider10').value) ;
+    const InternshipSalary = Number($w('#slider11').value);
+ const InternshipMonth = Number($w('#slider12').value);
+ const TaxRate = Number($w('#slider13').value);
+ $w('#text134').text = EntireFee.toString();
+ $w('#text135').text = Rent.toString();
+ $w('#text136').text = Utilities.toString();
+ $w('#text137').text = Grocery.toString();
+ $w('#text138').text = Miscelleaneous.toString();
+ $w('#text139').text = EarningPerMonth.toString();
+ $w('#text140').text = LoanAmount.toString();
+ $w('#text141').text = InterestRate.toString();
+ $w('#text142').text = JobSalary.toString();
+ $w('#text143').text = JobMonth.toString();
+ $w('#text145').text = InternshipSalary.toString();
+ $w('#text144').text = InternshipMonth.toString();
+ $w('#text146').text = TaxRate.toString();
+ console.log($w('#text134'))
+
+ //formulas
+ let loan_interest = LoanAmount * InterestRate * 1;// 1 ki jaga tenure ana ha
+ TotalMastersExpenses = EntireFee + ((Rent + Utilities + Grocery + Miscelleaneous) * courseDuration) + ((EarningPerMonth) * courseDuration) + loan_interest;
+ console.log(TotalMastersExpenses)
+ TotalIncomeDuringMasters = ((JobSalary * JobMonth) + (InternshipSalary * InternshipMonth)) * (1 - (TaxRate/100)); //  
+ console.log(TotalIncomeDuringMasters)
+ $w('#text76').text = `Total Income During Master's : $${TotalIncomeDuringMasters.toFixed(2)}`;
+ }
+
+
+export function input24_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    
+}
+export function slider1_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text134').show();
+    
+}
+
+
+export function slider2_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text135').show();
+    
+}
+
+export function slider3_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text136').show();
+    
+}
+
+
+export function slider4_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text137').show();
+    
+}
+
+
+export function slider5_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text138').show();
+    
+}
+
+export function slider6_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text139').show();
+    
+}
+
+
+export function slider7_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text140').show();
+    
+}
+
+
+export function slider8_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text141').show();
+   
+}
+
+
+export function slider9_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+     $w('#text142').show();
+    
+}
+
+export function slider10_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text143').show();
+    
+}
+
+export function slider11_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text145').show();
+}
+
+export function slider12_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text144').show();
+}
+
+export function slider13_change(event) {
+	calculateMastersExpenceTotal();
+    $w('#text76').show();
+    $w('#text146').show();
+}
+
+//form page 3 code start
+function calculateJobExpense() {
+    const rent1 = Number($w('#slider14').value);
+    const utilities1 = Number($w('#slider15').value);
+    const Grocery1 = Number($w('#slider16').value);
+    const Miscellaneous1 = Number($w('#slider17').value);
+     fulltimeSalary1 = Number($w('#slider18').value);
+    const Miscellaneous2 = Number($w('#slider19').value);
+    const taxRate2 = Number($w('#slider20').value);
+     year1 = (rent1 + Grocery1 + Miscellaneous1 + utilities1) * 12;
+     year2 = 1.06 * year1; console.log(year1)
+     year3 = 1.06 * year2;console.log(year2)
+     year4 = 1.06 * year3;console.log(year3)
+     year5 = 1.06 * year4;console.log(year4)
+     year6 = 1.06 * year5;console.log(year5)
+     year7 = 1.06 * year6;console.log(year6);  console.log(year7)
+    let TotalMasterExpense2 = year1 + year2 + year3 + year4 + year5; console.log(fulltimeSalary1)
+     fullTimeSalaryYear2 = ((fulltimeSalary1) * (1 + (Miscellaneous2/100))); console.log(fullTimeSalaryYear2) // annual increment
+     fullTimeSalaryYear3 = ((fullTimeSalaryYear2) * (1 + Miscellaneous2)); console.log(fullTimeSalaryYear3)
+     fullTimeSalaryYear4 = ((fullTimeSalaryYear3) * (1 + Miscellaneous2));  console.log(fullTimeSalaryYear4)
+     fullTimeSalaryYear5 = ((fullTimeSalaryYear4) * (1 + Miscellaneous2)); console.log(fullTimeSalaryYear5)
+     fullTimeSalaryYear6 = ((fullTimeSalaryYear5) * (1 + Miscellaneous2)); console.log(fullTimeSalaryYear6)
+     fullTimeSalaryYear7 = ((fullTimeSalaryYear6) * (1 + Miscellaneous2)); console.log(fullTimeSalaryYear7)
+    totalIncomeDuringJob = (fulltimeSalary1) * (1 - taxRate2) + ((fulltimeSalary1) * (1 + Miscellaneous2) * (1 - taxRate2)) + ((fullTimeSalaryYear2 * (1 + Miscellaneous2) * (1 - taxRate2)) + ((fullTimeSalaryYear3) * (1 + Miscellaneous2) * (1 - taxRate2)) + ((fullTimeSalaryYear4) * (1 + Miscellaneous2) * (1 - taxRate2)) + ((fullTimeSalaryYear5) * (1 + Miscellaneous2) * (1 - taxRate2)));
+    $w('#text88').text = `Total Income During Masters: $${totalIncomeDuringJob}`;
+    roi = (totalIncomeDuringJob + TotalIncomeDuringMasters) / (totalOnetimeMasters + TotalMastersExpenses);
+    console.log(roi)
+    BreakEvenPoint = ((totalOnetimeMasters + TotalMastersExpenses - TotalIncomeDuringMasters) / fulltimeSalary1);
+    SavingAfter3Years = ((TotalIncomeDuringMasters + fulltimeSalary1 + fullTimeSalaryYear2 + fullTimeSalaryYear3) - (totalOnetimeMasters + TotalMastersExpenses + year1 + year2 + year3));
+    SavingAfter5Years = ((TotalIncomeDuringMasters + fulltimeSalary1 + fullTimeSalaryYear2 + fullTimeSalaryYear3 + fullTimeSalaryYear4 + fullTimeSalaryYear5) - (totalOnetimeMasters + TotalMastersExpenses + TotalMasterExpense2));
+    $w('#text130').text = BreakEvenPoint.toString();
+    $w('#text131').text = SavingAfter3Years.toString();
+    $w('#text147').text = rent1.toString();
+$w('#text148').text = utilities1.toString();
+$w('#text149').text = Grocery1.toString();
+    $w('#text152').text = Miscellaneous1.toString();
+    $w('#text150').text = fulltimeSalary1.toString();
+    $w('#text153').text = Miscellaneous2.toString();
+    $w('#text151').text = taxRate2.toString();
+}
+export function slider14_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show();
+    $w('#text147').show();
+}
+export function slider15_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show(); 
+    $w('#text148').show();
+}
+export function slider16_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show();
+    $w('#text149').show();
+}
+export function slider17_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show();
+    $w('#text152').show();
+}
+export function slider18_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show();
+        $w('#text150').show();
+}
+export function slider19_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show();
+        $w('#text153').show();
+}
+export function slider20_change_1(event) {
+	calculateJobExpense();
+    $w('#text88').show();
+        $w('#text151').show();
+}
+
+
+$w.onReady(function () {
+    // Onload hidden elements
+    $w('#text134').hide();
+$w('#text135').hide();
+$w('#text137').hide();
+$w('#text136').hide();
+$w('#text138').hide();
+$w('#text139').hide();
+$w('#text140').hide();
+$w('#text141').hide();
+$w('#text142').hide();
+$w('#text143').hide();
+$w('#text145').hide();
+$w('#text144').hide();
+$w('#text146').hide();
+$w('#text147').hide();
+$w('#text148').hide();
+$w('#text149').hide();
+$w('#text152').hide();
+$w('#text150').hide();
+$w('#text153').hide();
+$w('#text151').hide();
+$w('#onetime').hide();
+$w('#mastersExpenses').show();
+$w('#jobExpenses').show();
+$w('#text64').hide();
+$w('#text76').hide();
+$w('#text88').hide();
+$w('#tick1').hide();
+$w('#tick2').hide();
+$w('#tick3').hide();
+$w('#button5').hide();
+$w('#selected2').hide();
+$w('#selected3').hide();
+$w('#selected4').hide();
+$w('#roi').show();
+
+    $w('#button4').onClick(() => {
+        // Next button click goes to the next state of the form
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+
+        if (stateNumber1 + 1 === 2) {
+            $w('#mastersExpenses').hide();
+            $w('#tick1').show();
+            $w('#onetime').show();
+            $w('#button5').show();
+            $w('#selected1').hide();
+            $w('#selected2').show();
+        } else if (stateNumber1 + 1 === 3) {
+            $w('#mastersExpenses').show();
+            $w('#tick1').show();
+            $w('#tick2').show();
+            $w('#jobExpenses').hide();
+            $w('#text41').hide();
+            $w('#button5').show();
+            $w('#selected1').hide();
+            $w('#selected3').show();
+            $w('#selected2').hide();
+        } else if (stateNumber1 + 1 === 4) {
+            $w('#mastersExpenses').show();
+            $w('#jobExpenses').show();
+            $w('#tick1').show();
+            $w('#tick2').show();
+            $w('#tick3').show();
+            $w('#text42').hide();
+            $w('#button5').show();
+            $w('#button4').hide();
+            $w('#selected1').hide();
+            $w('#selected2').hide();
+            $w('#selected3').hide();
+            $w('#selected4').show();
+            $w('#roi').hide();
+            let tableArr = [year1, year2, year3, year4, year5, year6, year7];
+            let tableArr2 = [fulltimeSalary1, fullTimeSalaryYear2, fullTimeSalaryYear3, fullTimeSalaryYear4, fullTimeSalaryYear5, fullTimeSalaryYear6, fullTimeSalaryYear7];
+            $w('#html1').postMessage(tableArr);
+            $w('#html1').postMessage(tableArr2);
+        }
+    });
+
+    // Back button code
+ $w('#button5').onClick(() => {
+ const currentState = $w('#statebox1').currentState.id;
+ const stateNumber1 = Number(currentState.slice(-1));
+ const nextState = `tab${stateNumber1 - 1}`; // Only difference in next or back button is the minus sign
+ console.log(currentState, stateNumber1, nextState);
+ $w('#statebox1').changeState(nextState);
+ let previousState1 = 0;
+
+ if (stateNumber1 - 1 === 1) {
+     console.log(stateNumber1)
+     previousState1 = stateNumber1 - 1;
+     $w('#button5').hide();
+     $w('#button4').show();
+     $w('#onetime').hide();
+     $w('#mastersExpenses').show();
+     $w('#jobExpenses').show();
+     $w('#text64').hide();
+     $w('#text76').hide();
+     $w('#text88').hide();
+     $w('#tick1').hide();
+     $w('#tick2').hide();
+     $w('#tick3').hide();
+     $w('#button5').hide();
+     $w('#selected2').hide();
+     $w('#selected1').show();
+     $w('#selected3').hide();
+     $w('#selected4').hide();
+     $w('#roi').show();
+     $w('#text41').show();
+     $w('#text42').show();
+ } else if (stateNumber1 - 1 === 2) {
+     console.log(stateNumber1)
+     previousState1 = stateNumber1 - 1;
+     $w('#mastersExpenses').hide();
+     $w('#tick1').show();
+     $w('#onetime').show();
+     $w('#button5').show();
+     $w('#jobExpenses').show();
+     $w('#selected1').hide();
+     $w('#selected2').show();
+     $w('#selected3').hide();
+     $w('#selected4').hide();
+     $w('#button4').show();
+     $w('#tick2').hide();
+     $w('#tick3').hide();
+     $w('#text42').show();
+ } else if (stateNumber1 - 1 === 3) {
+     console.log(stateNumber1)
+     previousState1 = stateNumber1 - 1;
+     $w('#onetime').show();
+     $w('#mastersExpenses').show();
+     $w('#tick1').show();
+     $w('#tick2').show();
+     $w('#tick3').hide();
+     $w('#jobExpenses').hide();
+     $w('#text41').hide();
+     $w('#button5').show();
+     $w('#selected1').hide();
+     $w('#selected3').show();
+     $w('#selected2').hide();
+     $w('#selected4').hide();
+     $w('#roi').show();
+     $w('#button4').show();
+ }
+ });
+ });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

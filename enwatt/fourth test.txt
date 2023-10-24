@@ -1,0 +1,57 @@
+import wixFetch from 'wix-fetch';
+const { fetch } = wixFetch;
+
+export const GetCoord = async (address) => {
+    const key = "3ecbc2e207044497a8bb354fdf5531b7";
+    let encodedAddress = encodeURIComponent(address);
+
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=${key}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    const { lat, lng } = data.results[0].geometry;
+
+    return { lat, lng };
+}
+
+
+
+changed code below 
+
+import wixFetch from 'wix-fetch';
+
+export const GetCoord = async (address) => {
+    const key = "3ecbc2e207044497a8bb354fdf5531b7";
+    let encodedAddress = encodeURIComponent(address);
+
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=${key}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    const { x, y } = data.results[0].annotations.Mercator;
+
+    return { lat: y, lng: x };
+}
+  
+
+old code 
+
+import {fetch} from 'wix-fetch';
+
+
+export const GetCoord = async (address) => {
+    const key = "3ecbc2e207044497a8bb354fdf5531b7";
+    let encodedAddress = encodeURIComponent(address);
+
+   // const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=${key}`;
+   let url = 'https://api.opencagedata.com/geocode/v1/json?q=73728+esslingen+am+neckar&key=3ecbc2e207044497a8bb354fdf5531b7&language=native&pretty=1';
+    console.log(url);
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    let { lat, lng } = data;
+
+    return { lat, lng };
+}
+

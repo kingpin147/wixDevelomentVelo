@@ -1,0 +1,174 @@
+import wixData from 'wix-data';
+
+let currentQuestionIndex = 0;
+let totalScore = 0;
+const questionsPerPage = 1; // Set to the number of questions per page
+let answers = [];
+$w.onReady(function () {
+
+    $w('#start').onClick(() => {
+        $w('#quizBox').changeState("tab1")
+        console.log("state is changed to tab1")
+
+    })
+
+    console.log("tab1");
+    wixData.query("Quiz")
+        .find()
+        .then((results) => {
+            console.log(results.items);
+            $w("#repeater1").onItemReady(($item, itemData) => {
+                console.log(itemData);
+                $item("#question").text = itemData.question;
+                let radioOptions = [
+                    { label: itemData.choice1, value: itemData.choice1 },
+                    { label: itemData.choice2, value: itemData.choice2 },
+                    { label: itemData.choice3, value: itemData.choice3 },
+                    { label: itemData.choice4, value: itemData.choice4 }
+                ];
+                $item("#radioGroup1").options = radioOptions;
+            });
+        })
+        .catch((error) => {
+            console.error('Query error:', error);
+        });
+
+    // $w('#sbmtQuiz').onClick(() => {
+    //     $w('#quizBox').changeState("tab2")
+    //     console.log("state is changed to tab2")
+    //     $w('#repeater1').forEachItem(async ($item, itemData, index) => {
+    //         let userAnswer;
+    //             console.log(itemData);
+    //         $w("#radioGroup1").onChange(function () {
+    //             let selectedIndex = $w("#radioGroup1").selectedIndex
+    //             console.log(selectedIndex)
+    //             if (selectedIndex === 0) { console.log(1); }
+    //             if (selectedIndex === 1) { console.log(2); }
+    //             if (selectedIndex === 2) { console.log(3); }
+    //             if (selectedIndex === 3) { console.log(4); }
+
+    //         });
+
+    //   });
+    $w('#sbmtQuiz').onClick(() => {
+        $w('#quizBox').changeState("tab2");
+        console.log("State is changed to tab2");
+
+        
+
+        $w('#repeater1').forEachItem(($item, itemData, index) => {
+            if (itemData.type === 'input') {
+                // Handle input type questions
+                const userAnswer = $item('#input' + index).value; // Replace 'input' with the actual ID prefix
+                answers.push({ question: itemData.question, answer: userAnswer });
+            } else if (itemData.type === 'radio') {
+                // Handle radio button questions
+                const selectedIndex = $item("#radioGroup" + index).selectedIndex; // Replace 'radioGroup' with the actual ID prefix
+                if (selectedIndex !== -1) {
+                    const selectedValue = $item("#radioGroup" + index).options[selectedIndex].value; // Replace 'radioGroup' with the actual ID prefix
+                    answers.push({ question: itemData.question, answer: selectedValue });
+                }
+            }
+        });
+
+        if (answers.length > 0) {
+            // You can now submit the answers to your "submission" database
+            // Example:
+            console.log(answers)
+            // wixData.insert("submission", answers)
+            //     .then((results) => {
+            //         // Data was successfully inserted
+            //         console.log("Data submitted successfully.");
+            //     })
+            //     .catch((error) => {
+            //         // Handle any errors
+            //         console.error("Error submitting data:", error);
+            //     });
+        }
+    });
+
+    function dataSubmit(params) {
+
+    }
+
+    $w('#sbmtQuiz').onClick(() => {
+        $w('#quizBox').changeState("tab2")
+        $w('#progressBar1').value = 35;
+        //enter data in database
+
+    });
+    $w('#submitBtn').onClick(() => {
+        let toInsert = {
+            "title": "Mr.",
+            "first_name": "John",
+            "last_name": "Doe"
+        };
+
+        wixData.insert("QuizData", toInsert)
+            .then((item) => {
+                console.log(item); //see item below
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    })
+});
+
+// function loadQuestions() {
+//     wixData.query("QuizQuestions")
+//         .find()
+//         .then((results) => {
+//             if (results.items.length > 0) {
+//                 const question = results.items[currentQuestionIndex];
+//                 $w("#questionText").text = question.Question;
+//                 $w("#option1Text").text = question.Option1;
+//                 $w("#option2Text").text = question.Option2;
+//                 $w("#option3Text").text = question.Option3;
+//                 $w("#option4Text").text = question.Option4;
+//                 $w("#option5Text").text = question.Option5;
+//             }
+//         });
+// }
+
+// export function onNextButtonClick(event) {
+//     const selectedOptionIndex = event.target.id.slice(-1);
+//     const question = $w("#questionText").text;
+
+//     wixData.query("QuizQuestions")
+//         .find()
+//         .then((results) => {
+//             if (results.items.length > 0) {
+//                 const questionItem = results.items[currentQuestionIndex];
+//                 const selectedPoints = questionItem["Points" + selectedOptionIndex];
+//                 totalScore += selectedPoints;
+
+//                 currentQuestionIndex++;
+//                 if (currentQuestionIndex < results.items.length) {
+//                     loadQuestions();
+//                 } else {
+//                     // All questions answered, show lead capture form and results
+//                     showResults();
+//                 }
+//             }
+//         });
+// }
+
+// function showResults() {
+//     // Hide question elements
+//     $w("#questionText").hide();
+//     $w("#optionsContainer").hide();
+
+//     // Show lead capture form
+//     $w("#leadCaptureForm").show();
+//     $w("#totalScore").text = "Total Score: " + totalScore;
+// }
+
+// export function onSubmitForm(event) {
+//     const name = $w("#nameInput").value;
+//     const email = $w("#emailInput").value;
+
+//     // You can send the name, email, and total score to your desired destination
+//     // For example, you can send this information to a Wix database or your email.
+
+//     // After handling the form submission, you can display a message or redirect the user.
+// }

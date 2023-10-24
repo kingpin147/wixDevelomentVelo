@@ -1,0 +1,521 @@
+{
+   "documentation" : "https://opencagedata.com/api",
+   "licenses" : [
+      {
+         "name" : "see attribution guide",
+         "url" : "https://opencagedata.com/credits"
+      }
+   ],
+   "rate" : {
+      "limit" : 2500,
+      "remaining" : 2498,
+      "reset" : 1681776000
+   },
+   "results" : [
+      {
+         "annotations" : {
+            "DMS" : {
+               "lat" : "50\u00b0 58' 39.03816'' N",
+               "lng" : "11\u00b0 19' 42.75264'' E"
+            },
+            "MGRS" : "32UPB6346249905",
+            "Maidenhead" : "JO50px94ko",
+            "Mercator" : {
+               "x" : 1261087.577,
+               "y" : 6584100.003
+            },
+            "NUTS" : {
+               "NUTS0" : {
+                  "code" : "DE"
+               },
+               "NUTS1" : {
+                  "code" : "DEG"
+               },
+               "NUTS2" : {
+                  "code" : "DEG0"
+               },
+               "NUTS3" : {
+                  "code" : "DEG05"
+               }
+            },
+            "OSM" : {
+               "edit_url" : "https://www.openstreetmap.org/edit?relation=3145143#map=17/50.97751/11.32854",
+               "note_url" : "https://www.openstreetmap.org/note/new#map=17/50.97751/11.32854&layers=N",
+               "url" : "https://www.openstreetmap.org/?mlat=50.97751&mlon=11.32854#map=17/50.97751/11.32854"
+            },
+            "UN_M49" : {
+               "regions" : {
+                  "DE" : "276",
+                  "EUROPE" : "150",
+                  "WESTERN_EUROPE" : "155",
+                  "WORLD" : "001"
+               },
+               "statistical_groupings" : [
+                  "MEDC"
+               ]
+            },
+            "callingcode" : 49,
+            "currency" : {
+               "alternate_symbols" : [],
+               "decimal_mark" : ",",
+               "html_entity" : "\u20ac",
+               "iso_code" : "EUR",
+               "iso_numeric" : "978",
+               "name" : "Euro",
+               "smallest_denomination" : 1,
+               "subunit" : "Cent",
+               "subunit_to_unit" : 100,
+               "symbol" : "\u20ac",
+               "symbol_first" : 0,
+               "thousands_separator" : "."
+            },
+            "flag" : "\ud83c\udde9\ud83c\uddea",
+            "geohash" : "u3041b1jw0trrfc4svjg",
+            "qibla" : 132.4,
+            "roadinfo" : {
+               "drive_on" : "right",
+               "road" : "Frauenplan",
+               "speed_in" : "km/h"
+            },
+            "sun" : {
+               "rise" : {
+                  "apparent" : 1681705080,
+                  "astronomical" : 1681697400,
+                  "civil" : 1681702980,
+                  "nautical" : 1681700340
+               },
+               "set" : {
+                  "apparent" : 1681755120,
+                  "astronomical" : 1681762800,
+                  "civil" : 1681757220,
+                  "nautical" : 1681759860
+               }
+            },
+            "timezone" : {
+               "name" : "Europe/Berlin",
+               "now_in_dst" : 1,
+               "offset_sec" : 7200,
+               "offset_string" : "+0200",
+               "short_name" : "CEST"
+            },
+            "what3words" : {
+               "words" : "rock.broker.partied"
+            },
+            "wikidata" : "Q882721"
+         },
+         "bounds" : {
+            "northeast" : {
+               "lat" : 50.9776496,
+               "lng" : 11.328959
+            },
+            "southwest" : {
+               "lat" : 50.9773708,
+               "lng" : 11.3284125
+            }
+         },
+         "components" : {
+            "ISO_3166-1_alpha-2" : "DE",
+            "ISO_3166-1_alpha-3" : "DEU",
+            "ISO_3166-2" : [
+               "DE-TH"
+            ],
+            "_category" : "outdoors/recreation",
+            "_type" : "museum",
+            "continent" : "Europe",
+            "country" : "Germany",
+            "country_code" : "de",
+            "house_number" : "1",
+            "museum" : "Goethe-Nationalmuseum",
+            "political_union" : "European Union",
+            "postcode" : "99423",
+            "road" : "Frauenplan",
+            "state" : "Thuringia",
+            "state_code" : "TH",
+            "suburb" : "Altstadt",
+            "town" : "Weimar"
+         },
+         "confidence" : 9,
+         "formatted" : "Goethe-Nationalmuseum, Frauenplan 1, 99423 Weimar, Germany",
+         "geometry" : {
+            "lat" : 50.9775106,
+            "lng" : 11.3285424
+         }
+      },
+      {
+         "annotations" : {
+            "DMS" : {
+               "lat" : "50\u00b0 58' 38.76600'' N",
+               "lng" : "11\u00b0 19' 45.44184'' E"
+            },
+            "MGRS" : "32UPB6351549898",
+            "Maidenhead" : "JO50px94mo",
+            "Mercator" : {
+               "x" : 1261170.725,
+               "y" : 6584086.681
+            },
+            "NUTS" : {
+               "NUTS0" : {
+                  "code" : "DE"
+               },
+               "NUTS1" : {
+                  "code" : "DEG"
+               },
+               "NUTS2" : {
+                  "code" : "DEG0"
+               },
+               "NUTS3" : {
+                  "code" : "DEG05"
+               }
+            },
+            "OSM" : {
+               "edit_url" : "https://www.openstreetmap.org/edit?way=199264471#map=17/50.97743/11.32929",
+               "note_url" : "https://www.openstreetmap.org/note/new#map=17/50.97743/11.32929&layers=N",
+               "url" : "https://www.openstreetmap.org/?mlat=50.97743&mlon=11.32929#map=17/50.97743/11.32929"
+            },
+            "UN_M49" : {
+               "regions" : {
+                  "DE" : "276",
+                  "EUROPE" : "150",
+                  "WESTERN_EUROPE" : "155",
+                  "WORLD" : "001"
+               },
+               "statistical_groupings" : [
+                  "MEDC"
+               ]
+            },
+            "callingcode" : 49,
+            "currency" : {
+               "alternate_symbols" : [],
+               "decimal_mark" : ",",
+               "html_entity" : "\u20ac",
+               "iso_code" : "EUR",
+               "iso_numeric" : "978",
+               "name" : "Euro",
+               "smallest_denomination" : 1,
+               "subunit" : "Cent",
+               "subunit_to_unit" : 100,
+               "symbol" : "\u20ac",
+               "symbol_first" : 0,
+               "thousands_separator" : "."
+            },
+            "flag" : "\ud83c\udde9\ud83c\uddea",
+            "geohash" : "u3041b1tpddkwm39pq28",
+            "qibla" : 132.4,
+            "roadinfo" : {
+               "drive_on" : "right",
+               "road" : "Frauenplan",
+               "speed_in" : "km/h"
+            },
+            "sun" : {
+               "rise" : {
+                  "apparent" : 1681705080,
+                  "astronomical" : 1681697400,
+                  "civil" : 1681702980,
+                  "nautical" : 1681700340
+               },
+               "set" : {
+                  "apparent" : 1681755120,
+                  "astronomical" : 1681762800,
+                  "civil" : 1681757220,
+                  "nautical" : 1681759860
+               }
+            },
+            "timezone" : {
+               "name" : "Europe/Berlin",
+               "now_in_dst" : 1,
+               "offset_sec" : 7200,
+               "offset_string" : "+0200",
+               "short_name" : "CEST"
+            },
+            "what3words" : {
+               "words" : "dart.ticket.classic"
+            }
+         },
+         "bounds" : {
+            "northeast" : {
+               "lat" : 50.9776557,
+               "lng" : 11.3294522
+            },
+            "southwest" : {
+               "lat" : 50.9772283,
+               "lng" : 11.3289047
+            }
+         },
+         "components" : {
+            "ISO_3166-1_alpha-2" : "DE",
+            "ISO_3166-1_alpha-3" : "DEU",
+            "ISO_3166-2" : [
+               "DE-TH"
+            ],
+            "_category" : "outdoors/recreation",
+            "_type" : "museum",
+            "continent" : "Europe",
+            "country" : "Germany",
+            "country_code" : "de",
+            "house_number" : "1",
+            "museum" : "Goethe-National-Museum/Goethes Wohnhaus",
+            "political_union" : "European Union",
+            "postcode" : "99423",
+            "road" : "Frauenplan",
+            "state" : "Thuringia",
+            "state_code" : "TH",
+            "suburb" : "Altstadt",
+            "town" : "Weimar"
+         },
+         "confidence" : 9,
+         "formatted" : "Goethe-National-Museum/Goethes Wohnhaus, Frauenplan 1, 99423 Weimar, Germany",
+         "geometry" : {
+            "lat" : 50.977435,
+            "lng" : 11.3292894
+         }
+      },
+      {
+         "annotations" : {
+            "DMS" : {
+               "lat" : "50\u00b0 58' 39.52704'' N",
+               "lng" : "11\u00b0 19' 44.18652'' E"
+            },
+            "MGRS" : "32UPB6349049921",
+            "Maidenhead" : "JO50px94lp",
+            "Mercator" : {
+               "x" : 1261131.91,
+               "y" : 6584123.958
+            },
+            "NUTS" : {
+               "NUTS0" : {
+                  "code" : "DE"
+               },
+               "NUTS1" : {
+                  "code" : "DEG"
+               },
+               "NUTS2" : {
+                  "code" : "DEG0"
+               },
+               "NUTS3" : {
+                  "code" : "DEG05"
+               }
+            },
+            "OSM" : {
+               "edit_url" : "https://www.openstreetmap.org/edit?node=5983702360#map=17/50.97765/11.32894",
+               "note_url" : "https://www.openstreetmap.org/note/new#map=17/50.97765/11.32894&layers=N",
+               "url" : "https://www.openstreetmap.org/?mlat=50.97765&mlon=11.32894#map=17/50.97765/11.32894"
+            },
+            "UN_M49" : {
+               "regions" : {
+                  "DE" : "276",
+                  "EUROPE" : "150",
+                  "WESTERN_EUROPE" : "155",
+                  "WORLD" : "001"
+               },
+               "statistical_groupings" : [
+                  "MEDC"
+               ]
+            },
+            "callingcode" : 49,
+            "currency" : {
+               "alternate_symbols" : [],
+               "decimal_mark" : ",",
+               "html_entity" : "\u20ac",
+               "iso_code" : "EUR",
+               "iso_numeric" : "978",
+               "name" : "Euro",
+               "smallest_denomination" : 1,
+               "subunit" : "Cent",
+               "subunit_to_unit" : 100,
+               "symbol" : "\u20ac",
+               "symbol_first" : 0,
+               "thousands_separator" : "."
+            },
+            "flag" : "\ud83c\udde9\ud83c\uddea",
+            "geohash" : "u3041b1qr6n3wqzhd89e",
+            "qibla" : 132.4,
+            "roadinfo" : {
+               "drive_on" : "right",
+               "road" : "Frauenplan",
+               "speed_in" : "km/h"
+            },
+            "sun" : {
+               "rise" : {
+                  "apparent" : 1681705080,
+                  "astronomical" : 1681697400,
+                  "civil" : 1681702980,
+                  "nautical" : 1681700340
+               },
+               "set" : {
+                  "apparent" : 1681755120,
+                  "astronomical" : 1681762800,
+                  "civil" : 1681757220,
+                  "nautical" : 1681759860
+               }
+            },
+            "timezone" : {
+               "name" : "Europe/Berlin",
+               "now_in_dst" : 1,
+               "offset_sec" : 7200,
+               "offset_string" : "+0200",
+               "short_name" : "CEST"
+            },
+            "what3words" : {
+               "words" : "limbs.impulse.cases"
+            }
+         },
+         "bounds" : {
+            "northeast" : {
+               "lat" : 50.9776964,
+               "lng" : 11.3289907
+            },
+            "southwest" : {
+               "lat" : 50.9775964,
+               "lng" : 11.3288907
+            }
+         },
+         "components" : {
+            "ISO_3166-1_alpha-2" : "DE",
+            "ISO_3166-1_alpha-3" : "DEU",
+            "ISO_3166-2" : [
+               "DE-TH"
+            ],
+            "_category" : "building",
+            "_type" : "building",
+            "continent" : "Europe",
+            "country" : "Germany",
+            "country_code" : "de",
+            "house_number" : "1",
+            "political_union" : "European Union",
+            "postcode" : "99423",
+            "road" : "Frauenplan",
+            "state" : "Thuringia",
+            "state_code" : "TH",
+            "suburb" : "Altstadt",
+            "town" : "Weimar"
+         },
+         "confidence" : 10,
+         "formatted" : "Frauenplan 1, 99423 Weimar, Germany",
+         "geometry" : {
+            "lat" : 50.9776464,
+            "lng" : 11.3289407
+         }
+      },
+      {
+         "annotations" : {
+            "DMS" : {
+               "lat" : "50\u00b0 58' 49.44000'' N",
+               "lng" : "11\u00b0 19' 34.68000'' E"
+            },
+            "MGRS" : "32UPB6329550221",
+            "Maidenhead" : "JO50px95dh",
+            "Mercator" : {
+               "x" : 1260837.949,
+               "y" : 6584609.52
+            },
+            "NUTS" : {
+               "NUTS0" : {
+                  "code" : "DE"
+               },
+               "NUTS1" : {
+                  "code" : "DEG"
+               },
+               "NUTS2" : {
+                  "code" : "DEG0"
+               },
+               "NUTS3" : {
+                  "code" : "DEG05"
+               }
+            },
+            "OSM" : {
+               "note_url" : "https://www.openstreetmap.org/note/new#map=17/50.98040/11.32630&layers=N",
+               "url" : "https://www.openstreetmap.org/?mlat=50.98040&mlon=11.32630#map=17/50.98040/11.32630"
+            },
+            "UN_M49" : {
+               "regions" : {
+                  "DE" : "276",
+                  "EUROPE" : "150",
+                  "WESTERN_EUROPE" : "155",
+                  "WORLD" : "001"
+               },
+               "statistical_groupings" : [
+                  "MEDC"
+               ]
+            },
+            "callingcode" : 49,
+            "currency" : {
+               "alternate_symbols" : [],
+               "decimal_mark" : ",",
+               "html_entity" : "\u20ac",
+               "iso_code" : "EUR",
+               "iso_numeric" : "978",
+               "name" : "Euro",
+               "smallest_denomination" : 1,
+               "subunit" : "Cent",
+               "subunit_to_unit" : 100,
+               "symbol" : "\u20ac",
+               "symbol_first" : 0,
+               "thousands_separator" : "."
+            },
+            "flag" : "\ud83c\udde9\ud83c\uddea",
+            "geohash" : "u30418xw3gm7sft30f5c",
+            "qibla" : 132.4,
+            "roadinfo" : {
+               "drive_on" : "right",
+               "speed_in" : "km/h"
+            },
+            "sun" : {
+               "rise" : {
+                  "apparent" : 1681705080,
+                  "astronomical" : 1681697400,
+                  "civil" : 1681702980,
+                  "nautical" : 1681700340
+               },
+               "set" : {
+                  "apparent" : 1681755120,
+                  "astronomical" : 1681762800,
+                  "civil" : 1681757220,
+                  "nautical" : 1681759860
+               }
+            },
+            "timezone" : {
+               "name" : "Europe/Berlin",
+               "now_in_dst" : 1,
+               "offset_sec" : 7200,
+               "offset_string" : "+0200",
+               "short_name" : "CEST"
+            },
+            "what3words" : {
+               "words" : "divisions.crass.slicing"
+            }
+         },
+         "components" : {
+            "ISO_3166-1_alpha-2" : "DE",
+            "ISO_3166-1_alpha-3" : "DEU",
+            "_category" : "postcode",
+            "_type" : "postcode",
+            "continent" : "Europe",
+            "country" : "Germany",
+            "country_code" : "de",
+            "political_union" : "European Union",
+            "postcode" : "99423"
+         },
+         "confidence" : 7,
+         "formatted" : "99423, Germany",
+         "geometry" : {
+            "lat" : 50.9804,
+            "lng" : 11.3263
+         }
+      }
+   ],
+   "status" : {
+      "code" : 200,
+      "message" : "OK"
+   },
+   "stay_informed" : {
+      "blog" : "https://blog.opencagedata.com",
+      "mastodon" : "https://en.osm.town/@opencage",
+      "twitter" : "https://twitter.com/OpenCage"
+   },
+   "thanks" : "For using an OpenCage API",
+   "timestamp" : {
+      "created_http" : "Mon, 17 Apr 2023 15:03:30 GMT",
+      "created_unix" : 1681743810
+   },
+   "total_results" : 4
+}

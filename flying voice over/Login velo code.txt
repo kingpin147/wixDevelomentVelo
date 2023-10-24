@@ -1,0 +1,186 @@
+import wixUsers from 'wix-users';
+import wixLocation from 'wix-location';
+import wixData from 'wix-data';
+import {doRegistration} from 'backend/register'
+
+
+let toInsert = {}
+let firstName = "";
+let lastName = "";
+let email = "";
+let password1 = "";
+let password2 = "";
+let nativeLang = "";
+let nativeAccent = "";
+let otherLang = "";
+let english;
+let impressions = "";
+let recording = "";
+let keywords = "";
+let description = "";
+let audition;
+let demo1;
+let demo1type;
+let demo2;
+let demo2type;
+let demo3;
+let demo3type;
+let demo4;
+let demo4type;
+let demo5;
+let demo5type;
+let demo6;
+let demo6type;
+let avi;
+let gender = "";
+let approved = true;
+let password = "";
+let userEmail;
+
+
+let user = wixUsers.currentUser
+
+
+$w.onReady(() => {
+
+    if (user.loggedIn === true) {
+        $w("#message").expand()
+        $w("#button12").show();
+        console.log("Logged in")
+        console.log(user.loggedIn);
+        $w("#email").disable()
+        $w("#password").disable();
+        checkLogin();
+    } else {
+        console.log(user.loggedIn);
+        console.log("Not logged in")
+	}
+});
+
+
+function login() {
+wixUsers.login(email, password)
+  .then(() => {
+    console.log("User is logged in");
+    $w("#message").text = "User Logged In";
+    $w("#message").show();
+    $w("#button12").show();
+    $w("#email").disable()
+    $w("#password").disable();
+    $w("#signIn").disable();
+    checkLogin();
+  })
+  .catch((err) => {
+    $w("#message").text = "There was an error";
+    $w("#message").expand();
+    console.log(err);
+  });
+}
+
+export function signIn_click(event) {
+	login();
+}
+
+function checkLogin() {
+    console.log(email)
+    console.log(password)
+
+    user.getEmail().then((email) => {
+            userEmail = email
+            console.log(userEmail)
+        }).then(() => {
+            console.log(user.loggedIn)
+            console.log(userEmail)
+            console.log(email)
+            if (user.loggedIn === true) {
+                let emailQuery = wixData.query("VoiceArtists").eq("email", userEmail);
+                console.log("Email's Match!")
+                emailQuery
+                    .find()
+                    .then((results) => {
+                        console.log(results);
+                                if (results.length > 0) {
+                                    console.log("User is logged in");
+                                    $w("#message").text = "User Successfully Logged In";
+                                    $w("#message").expand();
+                                    let item = results.items
+                                    console.log(item);
+                                    let redirect = item[0]["link-voiceartists-title"]
+                                    console.log(redirect);
+                                    wixLocation.to(redirect)
+                                } else {
+                                    console.log("login unsuccessful")
+                                    console.log(results)
+                                    console.log(results.length)
+                                }
+                    })
+                    .catch((err) => {
+                        $w("#message").text = "Profile Not Linked";
+                        console.log(err);
+                    })
+            } else {
+                console.log("Emails's Dont Match!")
+                console.log(userEmail + " + " + email)
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+
+}
+export function password_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        password = $w("#password").value 
+    }, 200);
+}
+
+export function email_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        email = $w("#email").value 
+    }, 200);
+}
+
+
+// console.log(results);
+//         if (results.length > 0) {
+//             console.log("User is logged in");
+//             $w("#message").text = "User Successfully Logged In";
+//             $w("#message").expand();
+//             let item = results.items
+//             console.log(item);
+//             let redirect = item[0]["link-voiceartists-title"]
+//             console.log(redirect);
+//             wixLocation.to(redirect)
+//         } else {
+//             console.log("login unsuccessful")
+//             console.log(results)
+//             console.log(results.length)
+//         }
+
+/**
+ *	Adds an event handler that runs when the element is clicked.
+ *	 @param {$w.MouseEvent} event
+ */
+export function button12_click(event) {
+    wixUsers.logout();
+    $w("#message").collapse();
+    $w("#button12").hide()
+}
+
+/**
+ *	Adds an event handler that runs when the element is clicked.
+ *	 @param {$w.MouseEvent} event
+ */
+export function text42_click(event) {
+	wixUsers.promptForgotPassword();
+}

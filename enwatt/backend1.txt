@@ -1,0 +1,34 @@
+import { fetch } from 'wix-fetch';
+
+const key = "AIzaSyAmJP-D1juCXMSGnH2xKoC7S9OxQYJhweM";
+
+export async function GetDistance(origin, dest) {
+    console.log(origin, dest, "origin destinations");
+
+    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${dest}&key=${key}`;
+
+  try {
+     const response = await fetch(url, { method: 'get' });
+     const result = await response.json();
+
+     if (result.status == 'INVALID_REQUEST') {
+         return {
+             status: "Failure",
+             message: result['error_message']
+         };
+     } else {
+         const distanceStr = result['rows'][0]['elements'][0]['distance']['text'];
+         const distanceNum = parseInt(distanceStr);
+         return {
+             message: distanceNum
+         };
+     }
+ } catch (error) {
+     console.log(error, "rr");
+     return {
+         status: "Failure1",
+         message: "Invalid Request"
+     };
+ }
+
+ }

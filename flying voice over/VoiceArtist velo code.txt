@@ -1,0 +1,137 @@
+import {session} from 'wix-storage';
+import wixData from 'wix-data';
+import wixWindow from 'wix-window';
+import wixUsers from 'wix-users';
+
+
+let email = session.getItem("userEmail");
+let isLoggedIn = session.getItem("isLoggedIn");
+
+
+$w.onReady(() => {
+    let data = $w("#dynamicDataset").getCurrentItem();
+    $w("#editButton").show();
+    console.log(data)
+
+    if (data.impressions === null || data.impressions === undefined || data.impressions === "") {
+        //console.log(data.impressions)
+    } else {
+        //console.log(data.impressions)
+        $w("#text100").expand()
+        $w("#impressions").expand()
+        $w("#impressions").text = data.impressions
+        $w("#editButton").show();
+    }
+
+    if (data.recordingSetUp === null || data.recordingSetUp === undefined || data.recordingSetUp === "") {
+        //console.log(data.impressions)
+    } else {
+        //console.log(data.impressions)
+        $w("#text103").expand()
+        $w("#text102").expand()
+        $w("#editButton").show();
+    }
+
+    if (data.otherFluentLanguages === null || data.otherFluentLanguages === undefined || data.otherFluentLanguages === "") {
+        console.log(data.otherFluentLanguages);
+    } else {
+        $w("#text104").expand();
+        $w("#text105").expand();
+        $w("#editButton").show();
+    }
+
+    if (data.demo1 === null || data.demo1 === undefined) {
+        //console.log(data.demo1)
+    } else {
+        //console.log(data.demo1)
+        $w("#track1").show()
+        $w("#track1").src = data.demo1
+        $w("#editButton").show();
+    }
+
+    if (data.demo2 === null || data.demo2 === undefined) {
+        //console.log(data.demo2)
+    } else {
+        //console.log(data.demo2)
+        $w("#track2").show()
+        $w("#track2").src = data.demo2
+        $w("#editButton").show();
+    }
+
+    if (data.demo3 === null || data.demo3 === undefined) {
+        //console.log(data.demo3)
+    } else {
+        //console.log(data.demo3)
+        $w("#track3").show()
+        $w("#track3").src = data.demo3
+    }
+
+    if (data.demo4 === null || data.demo4 === undefined) {
+        //console.log(data.demo4)
+    } else {
+        //console.log(data.demo4)
+        $w("#track4").show()
+        $w("#track4").src = data.demo4
+        $w("#editButton").show();
+    }
+
+    if (data.demo5 === null || data.demo5 === undefined) {
+        //console.log(data.demo5)
+    } else {
+        //console.log(data.demo5)
+        $w("#track5").show()
+        $w("#track5").src = data.demo5
+        $w("#editButton").show();
+    }
+
+    if (data.demo6 === null || data.demo6 === undefined) {
+        //console.log(data.demo6)
+    } else {
+        //console.log(data.demo6)
+        $w("#track6").show()
+        $w("#track6").src = data.demo6
+        $w("#editButton").show();
+    }
+ 
+    let user = wixUsers.currentUser;
+    let isLoggedIn = user.loggedIn;
+    let profileId = data._id;
+    let userId = user.id;
+	let userEmail = ""
+	let profileEmail = data.email
+	user.getEmail().then((email) => {
+		userEmail = email;
+	}).then(() => {
+		if (isLoggedIn === true && userEmail === profileEmail) {
+		console.log("Email's Match!")
+		console.log(userEmail + " + " + profileEmail)
+        $w("#editButton").show()
+    } else {
+		console.log("Emails's Dont Match!")
+        console.log(userEmail + " + " + profileEmail)
+    }
+	})
+	.catch((err) => {
+		console.log(err)
+	})
+
+ let userId1 = user.id;
+$w("#editButton").show();
+$w("#dynamicDataset").refresh();
+});
+
+
+
+export function editButton_click(event) {
+	openEditScreen()
+}
+
+function openEditScreen() {
+	let data = $w("#dynamicDataset").getCurrentItem();
+	wixWindow.openLightbox("Edit Profile", data)
+    .then((results) => {
+        if (results.refresh === "Yes") {
+            $w("#dynamicDataset").refresh();
+        }
+    })
+}

@@ -1,0 +1,156 @@
+// Velo API Reference: https://www.wix.com/velo/reference/api-overview/introduction
+
+$w.onReady(function () {
+
+    $w('#explore').onClick(() => {
+        // Next button click goes to the next state of the form
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+
+    });
+    //next button
+    $w('#2').onClick(() => {
+        // Next button click goes to the next state of the form
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+
+    });
+
+    // Back button code
+    $w('#1').onClick(() => {
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 - 1}`; // Only difference in next or back button is the minus sign
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+    });
+    $w('#4').onClick(() => {
+        // Next button click goes to the next state of the form
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+
+    });
+
+    // Back button code
+    $w('#3').onClick(() => {
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 - 1}`; // Only difference in next or back button is the minus sign
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+    });
+    $w('#6').onClick(() => {
+        // Next button click goes to the next state of the form
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+    });
+
+    // Back button code
+    $w('#5').onClick(() => {
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 - 1}`; // Only difference in next or back button is the minus sign
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+    });
+    /**$w('#8').onClick(() => {
+        // Next button click goes to the next state of the form
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState('tab1');
+    });
+    **/
+    // Back button code
+    $w('#7').onClick(() => {
+        const currentState = $w('#statebox1').currentState.id;
+        const stateNumber1 = Number(currentState.slice(-1));
+        const nextState = `tab${stateNumber1 - 1}`; // Only difference in next or back button is the minus sign
+        console.log(currentState, stateNumber1, nextState);
+        $w('#statebox1').changeState(nextState);
+    });
+
+    $w('#Chaufeuring').hide();
+    $w('#Weddings').hide();
+    $w('#Events').hide();
+    $w('#Filming').hide();
+    $w('#backButton').hide();
+});
+
+export function text62_click(event) {
+	$w('#Chaufeuring').show();
+    $w('#backButton').show();
+    $w('#backButton').enable();
+
+}
+
+export function image22_click(event) {
+	$w('#Chaufeuring').show(); 
+    $w('#backButton').show();
+    $w('#backButton').enable();
+}
+
+export function image21_click(event) {
+	$w('#Weddings').show(); 
+    $w('#backButton').show();
+    $w('#backButton').enable();
+}
+
+export function text61_click(event) {
+	$w('#Weddings').show(); 
+    $w('#backButton').show();
+    $w('#backButton').enable();
+}
+
+export function text60_click(event) {
+	$w('#Events').show();
+    $w('#backButton').show();
+   $w('#backButton').enable();
+}
+
+export function image20_click(event) {
+	$w('#Events').show();
+    $w('#backButton').show();
+    $w('#backButton').enable();
+}
+
+export function image19_click(event) {
+	 $w('#Filming').show(); 
+     $w('#backButton').show();
+     $w('#backButton').enable();
+}
+
+export function text59_click(event) {
+	$w('#Filming').show(); 
+    $w('#backButton').show();
+    $w('#backButton').enable();
+}
+
+export function backButton_click_1(event) {
+	$w('#Chaufeuring').hide();
+    $w('#Weddings').hide();
+    $w('#Events').hide();
+    $w('#Filming').hide();
+    $w('#backButton').hide();
+}
+
+export function backButton_click(event) {
+	$w('#Chaufeuring').hide();
+    $w('#Weddings').hide();
+    $w('#Events').hide();
+    $w('#Filming').hide();
+    $w('#backButton').hide();
+}

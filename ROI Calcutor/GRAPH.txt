@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Charts</title>
+   <!-- Include Chart.js library -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body onload="ready()">
+  <!-- Create a canvas element for the chart -->
+  <canvas id="myChart" width="566 px" height=" 320 px"></canvas>
+
+  <script>
+    // Define the chart globally
+    let myChart;
+
+    // Wait for the document to load
+    function ready() {
+      const ctx = document.getElementById('myChart').getContext('2d');
+
+      myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['3m', '6m', '9m', '12m', '15m', '18m', '21m', '24m', '27m', '30m', '33m', '36m'],
+          datasets: [
+            {
+              label: 'ROI ',
+              data: [],
+              backgroundColor: 'rgba(10, 168, 196, 0.2)',
+              borderColor: 'rgba(10, 168, 196, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Break Even Point',
+              data: [],
+              backgroundColor: 'rgba(102, 96, 151, 0.2)',
+              borderColor: 'rgba(102, 96, 151, 1)',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      window.onmessage = function(event) {
+        if (Array.isArray(event.data)) {
+          myChart.data.datasets[0].data = event.data;
+          myChart.data.datasets[1].data = event.data.map(value => value * 2); // Example: multiplying the values by 2 for the second line
+          myChart.update();
+        } else {
+          console.log("HTML Element received a generic message:");
+          console.log(event.data);
+        }
+      };
+
+      function handleClick(e) {
+        var activeBars = myChart.getElementAtEvent(e);
+        if (activeBars.length > 0) {
+          var value = myChart.config.data.datasets[activeBars[0]._datasetIndex].data[activeBars[0]._index];
+          var label = activeBars[0]._model.label;
+          window.parent.postMessage({
+            "type": "click",
+            "Label": label,
+            "value": value
+          }, "*");
+        }
+      }
+
+      // Attach the click event listener to the canvas element
+      ctx.canvas.addEventListener('click', handleClick);
+      
+      // Send a 'ready' message to the parent window
+      window.parent.postMessage({"type": "ready"}, "*");
+    }
+  </script>
+  <script>
+
+function myPrint() {
+
+    window.print();
+
+}
+
+</script>
+</body>
+</html>
+
+
+
+
+
+export function button1_click(event) {
+	let tableArr  =  [6, 7, 8, 9, 4, 3, 2, 1, 6, 7, 8, 9, 2, 1, 6, 7]
+	let tableArr2  = [2, 7, 7, 8, 2, 5, 8, 9, 6, 5, 8, 9, 2, 5, 6, 5]
+	$w('#html1').postMessage(tableArr)
+	$w('#html1').postMessage(tableArr2)
+}

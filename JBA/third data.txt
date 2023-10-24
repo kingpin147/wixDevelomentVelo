@@ -1,0 +1,62 @@
+import wixData from 'wix-data';
+
+$w.onReady(function () {
+	// Connect the repeater to the dataset
+	const query = wixData.query("contact03").descending("_createdDate");
+	query.find()
+	.then((results) => {
+		const repeaterData = results.items;
+	
+		$w("#listRepeater").data = repeaterData;
+	})
+	.catch((error) => {
+		console.log("Error while retrieving data: ", error);
+	});
+
+
+	// Add a new item to the dataset on button click
+	$w("#button1").onClick(() => {
+		const gradeInput = $w("#input1").value;
+		const newRecord = {
+			"gradeTest": gradeInput
+		};
+		const query = wixData.query("contact03").limit(1).descending("_createdDate");
+		query.find()
+		.then((results) => {
+			if(results.items.length === 0 || results.items[0].gradeTest !== ""){
+				// Insert new record with gradeTest field
+				return wixData.insert("contact03", newRecord);
+			} else {
+				// Update existing record with gradeTest field
+				const existingRecord = results.items[0];
+				existingRecord.gradeTest = gradeInput;
+				return wixData.update("contact03", existingRecord);
+			}
+		})
+		.then((results) => {
+			const item = results;
+			const newRecordId = item._id;
+			console.log("New record ID: ", newRecordId);
+			console.log("New record data: ", item);
+
+			// Update the repeater data to display the new item
+			const repeaterData = $w("#listRepeater").data.concat(item);
+			$w("#listRepeater").data = repeaterData;
+
+			// Update text box based on whether gradeTest field is empty or not
+			const gradeText = $w("#text57");
+			if(gradeInput === ""){
+				gradeText.text = "Grade not marked";
+			} else {
+				gradeText.text = "Grade marked";
+			}
+
+			console.log("Data retrieved from database: ", repeaterData);
+			console.log("User input inserted: ", gradeInput);
+		})
+		.catch((error) => {
+			console.log("Error while saving new item: ", error);
+		});
+	});
+});
+

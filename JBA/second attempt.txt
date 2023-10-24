@@ -1,0 +1,66 @@
+import wixData from 'wix-data';
+
+$w.onReady(function () {
+    $w("#dropdown4").value = "1";
+    // Connect the form to the "Sides Submission" collection
+    $w("#dynamicDataset").onReady(() => {
+        // Retrieve the ID of the specific record in the "Sides Submission" collection
+        const currentItem = $w("#dynamicDataset").getCurrentItem();
+        const recordId = currentItem._id;
+        console.log("Current record ID: ", recordId);
+        console.log("Current items: ", currentItem);
+
+        $w("#dropdown4").onChange((event) => {
+            // Get the selected value from the dropdown
+            const selectedValue = event.target.value;
+            console.log("Selected value: ", selectedValue);
+
+            // Save the rating value to the "GradeTest" field of the record in the "Sides Submission" collection
+            const ratingValue = selectedValue;
+
+            if (currentItem.gradeTest === undefined || currentItem.gradeTest === "") {
+                wixData.insert("contact03", { "gradeTest": ratingValue })
+                    .then((results) => {
+                        const item = results;
+                        const newRecordId = item._id;
+                        console.log("New record ID: ", newRecordId);
+                        console.log("New gradeTest value: ", ratingValue);
+
+                        // Show the current items after inserting value
+                        const updatedItem = $w("#dynamicDataset").getCurrentItem();
+                        console.log("Updated items: ", updatedItem);
+
+                        $w("#text57").text = "Grade marked";
+                    })
+                    .catch((error) => {
+                        // Error message
+                        console.log("Error while saving rating value: ", error);
+                    });
+            } else {
+                wixData.update("contact03", { "_id": recordId, "gradeTest": ratingValue })
+                    .then(() => {
+                        // Success message
+                        console.log("Rating value saved successfully.");
+                        console.log("New gradeTest value: ", ratingValue);
+
+                        // Show the current items after updating value
+                        const updatedItem = $w("#dynamicDataset").getCurrentItem();
+                        console.log("Updated items: ", updatedItem);
+                    })
+                    .catch((error) => {
+                        // Error message
+                        console.log("Error while saving rating value: ", error);
+                    });
+            }
+        });
+
+        // Check if the "GradeTest" field is empty or not
+        if (currentItem.gradeTest === undefined || currentItem.gradeTest === "") {
+            $w("#text57").text = "Grade not marked";
+            console.log("Grade not marked");
+        } else {
+            $w("#text57").text = "Grade marked";
+            console.log("Grade marked");
+        }
+    });
+});

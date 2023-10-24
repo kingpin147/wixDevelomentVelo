@@ -1,0 +1,65 @@
+import wixUsersBackend from 'wix-users-backend';
+import { authentication } from 'wix-members-backend';
+
+export function doRegistration(email, password, firstName, lastName) {
+    let isApproved = true
+    if (isApproved) {
+        return wixUsersBackend.register(email, password, {
+                "contactInfo": {
+                    "firstName": firstName,
+                    "lastName": lastName,
+                }
+            })
+            .then((result) => {
+                console.log(result)
+                wixUsersBackend.approveByToken(result.approvalToken)
+                let sessionToken = result.sessionToken;
+                return { sessionToken, "approved": true };
+            })
+            .catch((err) => {
+                console.log(err);
+                return { "approved": false };
+            })
+        // user is now active, but not logged in
+        // return the session token to log in the user client-side
+    } else {
+        return { "approved": false };
+    }
+}
+
+export async function registerUserBackend(email, password, firstName, lastName) {
+    let options = {
+        "contactInfo": {
+            "firstName": firstName,
+            "lastName": lastName,
+        }
+    }
+    return authentication.register(email, password, options)
+        .then((registrationResult) => {
+            return {
+                approved: true,
+                sessionToken: registrationResult.sessionToken
+            };
+        })
+        .catch((error) => {
+            return {
+                approved: false
+            };
+        })
+}
+
+export function approve(token) {
+    return authentication.approveByToken(token)
+        .then((sessionToken) => {
+            return {
+                sessionToken: sessionToken,
+                approved: true
+            };
+        })
+        .catch((error) => {
+            return {
+                approved: false,
+                reason: error
+            };
+        });
+}

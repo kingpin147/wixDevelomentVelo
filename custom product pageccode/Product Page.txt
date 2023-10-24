@@ -1,0 +1,72 @@
+[10:30 am, 19/09/2023] Sarfraz Wix Coder: ////////////***********custom cart page */
+
+import wixData from 'wix-data';
+import wixPayFrontend from 'wix-pay';
+import {createMyPayment} from 'backend/pay.jsw';
+import {create_session} from 'backend/stripePayment.jsw'
+import { cart } from 'wix-stores';
+import wixLocation from 'wix-location';
+
+let items='';
+
+let product
+import {local} from 'wix-storage'
+let products = [],
+    customProducts = [];
+    let total,email,gift,delivery
+let currency, additionalDetails, subTotal=0, shipping = 0, totalPrice=0;
+
+let leng;
+$w.onReady(async function () {
+ 
+
+   await get_myCart();
+   // console.log(products)
+   if(products.length === leng)
+    await refreshCart();
+  await  update_shipping()
+
+
+  
+  $w('#pay').onClick(async()=>{
+	  
+ //wixLocation.to('/success')
+     let …
+[10:30 am, 19/09/2023] Sarfraz Wix Coder: ////////*************successs page  */
+import {cart} from 'wix-stores'
+import wixLocation from 'wix-location';
+import {local} from 'wix-storage'
+import wixData from 'wix-data';
+import {createOrder} from 'backend/createOrder.jsw'
+let status
+$w.onReady(async function () {
+
+	let id = wixLocation.query.t;
+	let carts = await cart.getCurrentCart()
+//	let data =await get_transaction(id);
+//	if(data){
+	//	$w('#success').show()
+	//}
+	let customer = JSON.parse(local.getItem('customer'));
+	console.log(customer,'customer')
+
+	if(customer.result.status==='Offline'){
+		status="NOT_PAID"
+	}
+	else{
+		status=customer.result.status
+	}
+
+	let order = await createOrder(customer,status)
+	if(order){
+		local.clear();
+		for(let i in carts.lineItems){
+		let items = carts.lineItems[i]
+		cart.removeProduct(items.id);
+		
+			
+		}
+		
+	}
+
+});

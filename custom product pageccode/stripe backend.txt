@@ -1,0 +1,40 @@
+/////////////**************stripe backend */
+
+const stripe = require('stripe')('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');
+export async function create_session(price,name,quantity){
+    const session = await stripe.checkout.sessions.create({
+        success_url: 'https://www.at-art.shop/success?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: 'https://www.at-art.shop/caneled',
+        shipping_address_collection: {
+          allowed_countries: ['IN'],
+          
+        },
+        line_items: [
+          {price:await create_price(price,name), quantity:quantity},
+        ],
+        mode: 'payment',
+      });
+      return session
+}
+export async function create_price(price1,name){
+    const price = await stripe.prices.create({
+        unit_amount:price1*100,
+        currency: 'INR',
+        product:await create_product(name),
+      });
+      return price.id;
+}
+export async function create_product(name){
+    const product = await stripe.products.create({
+        name: name
+      });
+      return product.id
+}
+
+// Call this function on success page with the help of session_id
+export async function retreive_session(id){
+  const session = await stripe.checkout.sessions.retrieve(
+    id
+  );
+return session  
+}

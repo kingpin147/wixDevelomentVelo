@@ -1,0 +1,483 @@
+import wixWindow from 'wix-window';
+import wixData from 'wix-data';
+import wixLocation from 'wix-location';
+
+let data = wixWindow.lightbox.getContext();
+
+let avatarPhoto = data.avatarPhoto;
+let firstName = data.firstName;
+let lastName = data.lastName;
+let email = data.email;
+let description = data.description;
+let yourNativeLanguage = data.yourNativeLanguage;
+let yourNativeAccent = data.yourNativeAccent;
+let id = data._id;
+let fluentInEnglish = data.fluentInEnglish;
+let keywords = data.keywords;
+let recordingSetUp = data.recordingSetUp;
+let impressions = data.impressions;
+let demo1 = data.demo1
+let demo1type = data.demo1Name
+let demo2 = data.demo2
+let demo2type = data.demo2Name
+let demo3 = data.demo3
+let demo3type = data.demo3Name
+let demo4 = data.demo4
+let demo4type = data.demo4Name
+let demo5 = data.demo5
+let demo5type = data.demo5Name
+let demo6 = data.demo6
+let demo6type = data.demo6Name
+let gender = data.gender
+let toInsert = {}
+
+
+$w.onReady(() => {
+    console.log(data);
+
+    if (yourNativeLanguage === null || yourNativeLanguage === undefined) {
+        console.log(yourNativeLanguage);
+    } else {
+        $w('#nativeLang').value = yourNativeLanguage;
+    }
+
+    if (yourNativeAccent === null || yourNativeAccent === undefined) {
+        console.log(yourNativeAccent);
+    } else {
+        $w('#nativeAccent').value = yourNativeAccent;
+    }
+
+    if (gender === null || gender === undefined) {
+        console.log(gender);
+    } else {
+        $w('#gender').value = gender;
+    }
+
+    if (avatarPhoto === null || avatarPhoto === undefined) {
+        $w("#profilePhotoDisplay").hide();
+    } else {
+        $w('#profilePhotoDisplay').src = avatarPhoto;
+        $w("#profilePhotoDisplay").show();
+    }
+
+    if (data.firstName === null || data.firstName === undefined) {
+        console.log(data.firstName);
+    } else {
+        $w('#firstNameInput').value = data.firstName;
+    }
+
+    if (data.lastName === null || data.lastName === undefined) {
+        console.log(data.lastName);
+    } else {
+        $w('#lastNameInput').value = data.lastName;
+    }
+
+    if (data.email === null || data.email === undefined) {
+        console.log(data.email);
+    } else {
+        $w('#emailInput').value = data.email;
+    }
+
+    if (description === null || description === undefined) {
+        console.log(description);
+    } else {
+        $w('#description').value = description;
+    }
+
+    if (fluentInEnglish === null || fluentInEnglish === undefined) {
+        console.log(fluentInEnglish);
+    } else {
+        $w('#english').value = fluentInEnglish;
+    }
+
+    if (impressions === null || impressions === undefined) {
+        console.log(impressions);
+    } else {
+        $w('#impressions').value = impressions;
+    }
+
+    if (recordingSetUp === null || recordingSetUp === undefined) {
+        console.log(recordingSetUp);
+    } else {
+        $w('#recordingSetup').value = recordingSetUp;
+    }
+
+    if (keywords === null || keywords === undefined) {
+        console.log(keywords);
+    } else {
+        $w('#keywords').value = keywords;
+    }
+
+    if (demo1type === null || demo1type === undefined) {
+        console.log(demo1type);
+    } else {
+        $w('#demoType').value = demo1type;
+    }
+
+    if (demo2type === null || demo2type === undefined) {
+        console.log(demo2type);
+    } else {
+        $w('#demoType2').value = demo2type;
+    }
+    if (demo3type === null || demo3type === undefined) {
+        console.log(demo3type);
+    } else {
+        $w('#demoType3').value = demo3type;
+    }
+        if (demo4type === null || demo4type === undefined) {
+        console.log(demo4type);
+    } else {
+        $w('#demoType4').value = demo4type;
+    }
+    if (demo5type === null || demo5type === undefined) {
+        console.log(demo5type);
+    } else {
+        $w('#demoType5').value = demo5type;
+    }
+    if (demo6type === null || demo6type === undefined) {
+        console.log(demo6type);
+    } else {
+        $w('#demoType6').value = demo6type;
+    }
+
+
+});
+
+function submitData() {
+
+	if (description === "" || description === " ") {
+		description = data.paragraphField
+	}
+
+	if (firstName === "" || firstName === " ") {
+		firstName = data.firstName
+	}
+
+	if (lastName === "" || lastName === " ") {
+		lastName = data.lastName
+	}
+
+	if (email === "" || email === " ") {
+		email = data.email
+	}
+
+	if (yourNativeAccent === "" || yourNativeAccent === " ") {
+		yourNativeAccent = data.yourNativeAccent
+	}
+
+    if (impressions === "" || impressions === " ") {
+		impressions = data.impressions
+	}
+
+    if (recordingSetUp === "" || recordingSetUp === " ") {
+		recordingSetUp = data.recordingSetUp
+	}
+
+    if (keywords === "" || keywords === " ") {
+		keywords = data.keywords
+	}
+   
+	toInsert = {
+		"_id": id,
+        "approved": data.approved,
+        "artistRank": data.artistRank,
+        "password": data.password,
+		"firstName": firstName,
+		"lastName": lastName,
+		"email": email,
+        "avatarPhoto": avatarPhoto,
+        "description": description,
+        "gender": gender,
+        "yourNativeLanguage": yourNativeLanguage,
+        "yourNativeAccent": yourNativeAccent,
+        "fluentInEnglish": fluentInEnglish,
+        "keywords": keywords,
+        "recordingSetUp": recordingSetUp,
+        "impressions": impressions,
+        "demo1": demo1,
+        "demo2": demo2,
+        "demo3": demo3,
+        "demo4": demo4,
+        "demo5": demo5,
+        "demo6": demo6,
+        "demo1Name": demo1type,
+        "demo2Name": demo2type,
+        "demo3Name": demo3type,
+        "demo4Name": demo4type,
+        "demo5Name": demo5type,
+        "demo6Name": demo6type,
+	}
+
+	console.log(toInsert);
+
+	let success = {
+		"refresh": "Yes"
+	}
+    
+    wixData.update("VoiceArtists", toInsert)
+	.then((results) => {
+		let item = results;
+        console.log(item);
+        $w("#success").text = "Data Successfully Updated"
+        $w("#success").show()
+        console.log("Data Updated!")
+		wixWindow.lightbox.close(success);
+        wixLocation.to(data["link-voiceartists-title"]);
+	})
+	.catch( (err) => {
+		let errorMsg = err;
+        $w("#error").text = err;
+        $w("#error").show();
+        console.log(err)
+    });
+}
+
+export function aviBtn_change(event) {
+    $w("#aviBtn").fileType = "Image";
+    $w("#aviBtn").startUpload()
+        .then((uploadedFile) => {
+            avatarPhoto = uploadedFile.url; 
+            console.log(avatarPhoto);
+			$w('#profilePhotoDisplay').src = avatarPhoto;
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+
+
+export function lastNameInput_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        lastName = $w("#lastNameInput").value 
+    }, 200);
+}
+
+export function firstNameInput_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        firstName = $w("#firstNameInput").value 
+    }, 200);
+}
+
+export function emailInput_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        email = $w("#emailInput").value 
+    }, 200);
+}
+
+
+export function description_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        description = $w("#description").value 
+    }, 200);
+}
+
+
+export function makeChanges_click(event) {
+	submitData()
+}
+
+
+
+
+export function gender_change(event) {
+	gender = $w("#gender").value;
+}
+
+export function nativeLang_change(event) {
+    yourNativeLanguage = $w("#nativeLang").value;
+}
+
+export function english_change(event) {
+	fluentInEnglish = $w("#english").value
+}
+
+export function demoType_change(event) {
+	demo1type = $w("#demoType").value
+}
+
+export function demoType2_change(event) {
+	demo2type = $w("#demoType2").value
+}
+
+export function demoType3_change(event) {
+	demo3type = $w("#demoType3").value
+}
+
+export function demoType4_change(event) {
+	demo4type = $w("#demoType4").value
+}
+
+export function demoType5_change(event) {
+	demo5type = $w("#demoType5").value
+}
+
+export function demoType6_change(event) {
+	demo6type = $w("#demoType6").value
+}
+
+export function demo1Btn_change(event) {
+	$w("#demo1Btn").fileType = "Audio";
+    $w("#demo1Btn").startUpload()
+        .then((uploadedFile) => {
+            demo1 = uploadedFile.url; 
+            console.log(demo1);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demo2Btn_change(event) {
+	$w("#demo2Btn").fileType = "Audio";
+    $w("#demo2Btn").startUpload()
+        .then((uploadedFile) => {
+            demo2 = uploadedFile.url; 
+            console.log(demo2);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        }); 
+}
+
+export function demo3Btn_change(event) {
+	$w("#demo3Btn").fileType = "Audio";
+    $w("#demo3Btn").startUpload()
+        .then((uploadedFile) => {
+            demo3 = uploadedFile.url; 
+            console.log(demo3);
+            $w("#aviBtn").scrollTo().then(() => {
+            console.log("Scroll Complete")
+        })
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demo4Btn_change(event) {
+	$w("#demo4Btn").fileType = "Audio";
+    $w("#demo4Btn").startUpload()
+        .then((uploadedFile) => {
+            demo4 = uploadedFile.url; 
+            console.log(demo4);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demo5Btn_change(event) {
+	$w("#demo5Btn").fileType = "Audio";
+    $w("#demo5Btn").startUpload()
+        .then((uploadedFile) => {
+            demo5 = uploadedFile.url; 
+            console.log(demo5);
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        });
+}
+
+export function demo6Btn_change(event) {
+	$w("#demo6Btn").fileType = "Audio";
+    $w("#demo6Btn").startUpload()
+        .then((uploadedFile) => {
+            demo6 = uploadedFile.url; 
+            console.log(demo6);
+            $w("#aviBtn").scrollTo().then(() => {
+            console.log("Scroll Complete")
+        })
+        })
+        .catch((uploadError) => {
+            let errCode = uploadError.errorCode; // 7751
+            let errDesc = uploadError.errorDescription; // "Error description"
+        }); 
+}
+
+export function nativeAccent_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        yourNativeAccent = $w("#nativeAccent").value 
+    }, 200);
+}
+
+export function impressions_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        impressions = $w("#impressions").value 
+    }, 200);
+}
+
+export function recordingSetup_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        recordingSetUp = $w("#recordingSetup").value 
+    }, 200);
+}
+
+export function keywords_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        keywords = $w("#keywords").value 
+    }, 200); 
+}
+
+
+export function keywords_change(event) {
+	if (keywords.length > 0) {
+        $w("#description").scrollTo().then(() => {
+            console.log("Scroll Complete")
+        })
+    }
+}
+
+export function description_change(event) {
+	if (description.length > 0) {
+        $w("#text55").scrollTo().then(() => {
+            console.log("Scroll Complete")
+        })
+    }
+}

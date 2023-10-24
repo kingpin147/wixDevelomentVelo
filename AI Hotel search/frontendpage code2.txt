@@ -1,0 +1,60 @@
+import { aiCompletion } from 'backend/ChatGPTInegration.jsw';
+import wixWindow from 'wix-window';
+import { getImages } from 'backend/PixabayVersuchIntegartionALA.jsw';
+
+$w.onReady(async function () {
+    let chatArray = [];
+    $w("#askButton").enable();
+
+    const askQuestion = async () => {
+        $w("#loadingSpinner").show();
+        const userPrompt = $w("#promptInput").value;
+        const language = $w('#languageDropdown').value;
+
+        console.log({ "role": "user", "content": `Here is the client's question: ${userPrompt}. Answer the question in ${language}` });
+
+        chatArray.push({ "role": "user", "content": `Here is the client's question: ${userPrompt}. Answer the question in ${language}` });
+
+        const answer = await aiCompletion(chatArray);
+        console.log(answer, "answer");
+
+        const words = answer.split(" ");
+        const location = `${words[0]}+${words[1]}`;
+        console.log(location, "location");
+
+        const res = await getImages(location);
+        const imgSrc = res[0].largeImageURL;
+        console.log(imgSrc, "img");
+
+        $w('#column2').background.src = imgSrc;
+        $w('#answerBox').value = `${answer}\n\nViele Spaß bei Ihrer Reise und liebe Grüße,\n\nIhr Ki-Urlaub.de-Team\n\n`;
+
+        chatArray.push({ "role": "assistant", "content": `${answer}.` });
+
+        $w('#loadingSpinner').hide();
+    };
+
+    $w("#captcha").onVerified(() => {
+        $w("#askButton").enable();
+        $w('#captcha').collapse();
+    });
+
+    $w('#askButton').onClick(askQuestion);
+});
+
+export function lightboxButton_click(event) {
+    const dataToSend = {
+        generation: $w('#answerBox').value,
+        question: $w('#promptInput').value
+    };
+
+    wixWindow.openLightbox("Ki-Vorschlag merken", dataToSend);
+}
+
+export async function askButton_click(event) {
+    const location = $w('#location').value;
+    const res = await getImages(location);
+    const imgSrc = res[0].largeImageURL;
+
+    $w('#column2').background.src = imgSrc;
+}

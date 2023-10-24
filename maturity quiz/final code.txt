@@ -1,0 +1,261 @@
+import wixData from 'wix-data';
+
+let answers = [];
+let selected = [];
+let newValue;
+let selectedIndex;
+let total = 0;
+
+$w.onReady(function () {
+    $w('#start').onClick(() => {
+        $w('#quizBox').changeState("tab1");
+        $w('#progressBar1').value = 35;
+        console.log("State is changed to tab1");
+    });
+
+    console.log("tab1");
+
+    wixData.query("Quiz")
+        .find()
+        .then((results) => {
+            console.log(results.items);
+            $w("#repeater1").onItemReady(($item, itemData) => {
+                // console.log(itemData);
+                $item("#question").text = itemData.question;
+                if (itemData) {
+                    let radioOptions = [
+                        { label: itemData.choice1, value: itemData.choice1 },
+                        { label: itemData.choice2, value: itemData.choice2 },
+                        { label: itemData.choice3, value: itemData.choice3 },
+                        { label: itemData.choice4, value: itemData.choice4 },
+                        { label: itemData.choice5, value: itemData.choice5 }
+                    ];
+                    $item("#radioGroup1").options = radioOptions;
+                } else if ($item("#radioGroup1").options == null) {
+                    $item("#radioGroup1").hide();
+                }
+            });
+        })
+        .catch((error) => {
+            console.error('Query error:', error);
+        });
+
+    $w('#radioGroup1').onChange((event) => {
+
+        newValue = event.target.value;
+        selectedIndex = event.target.selectedIndex;
+        console.log(selectedIndex);
+        selected.push(selectedIndex);
+        answers.push(newValue);
+        console.log(selected);
+    });
+
+    // $w('#repeater1').forEachItem(($item, itemData, index) => {
+    //      let selectedIndex = $item("#radioGroup1").selectedIndex;
+    //      const selectedValue = $item("#radioGroup1").value;
+    //     console.log(selectedValue);
+    //     console.log(selectedIndex);
+    //    answers.push(selectedValue);
+    //     $w('#radioGroup1').onChange((event) => {
+    //         newValue = event.target.value;
+    //         console.log(newValue);
+    //         answers.push(newValue);
+    //     });
+    // });
+    //     $w('#repeater1').forEachItem(($item, itemData, index) => {
+    //     // Assuming each radio button inside the repeater has a unique ID like radioGroup1, radioGroup2, etc.
+    //     const radioGroupName = `radioGroup${index + 1}`; // Construct the ID based on the item index
+
+    //     // Add an event handler for the radio button
+    //     $item(radioGroupName).onChange((event) => {
+    //         const selectedValue = event.target.value;
+    //         console.log(`Item ${index + 1} Selected Value: ${selectedValue}`);
+    //         answers[index] = selectedValue; // Store the answer in the corresponding index of the array
+    //     });
+    // });
+
+    $w('#sbmtQuiz').onClick(() => {
+        $w('#quizBox').changeState("tab2");
+        $w('#progressBar2').value = 70;
+        console.log(answers);
+        for (let i = 0; i < selected.length; i++) {
+            const index = selected[i];
+
+            // Check the value at each index and add accordingly using if conditions
+            if (index === 0) {
+                total = total+ 1;
+            } else if (index === 1) {
+                total = total+ 2;
+            } else if (index === 2) {
+                total = total+ 3;
+            } else if (index === 3) {
+                total = total+ 4;
+            } else if (index === 4) {
+                total = total+ 5;
+            } else {
+                // Handle unexpected values here
+                console.log(`Unexpected value at index ${index}`);
+            }
+        }
+        // Log the total
+        console.log(`Total numbers collected from the array: ${total}`);
+    });
+
+    $w('#submitBtn').onClick(() => {
+        // Push odd-numbered values from 'answers' into 'answer2'
+
+        // for (let i = 0; i < answers.length; i++) {
+        //     if (i % 2 === 1) {
+        //         answer2.push(answers[i]);
+        //     }
+
+        //     console.log(answer2);
+        // }
+        // Check the validity of each input separately
+        const input1Valid = $w('#input1').valid;
+        const input2Valid = $w('#input2').valid;
+        const input3Valid = $w('#input3').valid;
+        const input4Valid = $w('#input4').valid;
+        const input5Valid = $w('#input5').valid;
+
+        // Check if each input is valid
+        const input1Value = $w('#input1').value;
+        const input2Value = $w('#input2').value;
+        const input3Value = $w('#input3').value;
+        const input4Value = $w('#input4').value;
+        const input5Value = $w('#input5').value;
+
+        // Custom error messages for each input
+        if (!input1Valid || input1Value === null || input1Value.trim() === '') {
+            $w('#text121').text = "invalid fullname";
+        }
+
+        if (!input2Valid || input2Value === null || input2Value.trim() === '') {
+            $w('#text121').text = "invalid work email";
+        }
+
+        if (!input3Valid || input3Value === null || input3Value.trim() === '') {
+            $w('#text121').text = "invalid job title";
+        }
+
+        if (!input4Valid || input4Value === null || input4Value.trim() === '') {
+            $w('#text121').text = "invalid answer for business unit";
+        }
+
+        if (!input5Valid || input5Value === null || input5Value.trim() === '') {
+            $w('#text121').text = "invalid phone number";
+        }
+
+        if (
+            input1Valid &&
+            input2Valid &&
+            input3Valid &&
+            input4Valid &&
+            input5Valid &&
+            input1Value !== null &&
+            input1Value.trim() !== '' &&
+            input2Value !== null &&
+            input2Value.trim() !== '' &&
+            input3Value !== null &&
+            input3Value.trim() !== '' &&
+            input4Value !== null &&
+            input4Value.trim() !== '' &&
+            input5Value !== null &&
+            input5Value.trim() !== ''
+        ) {
+            $w('#quizBox').changeState("tab3");
+            $w('#progressBar3').value = 100;
+            let toInsert = {
+                "fullName": input1Value,
+                "workEmail": input2Value,
+                "jobTitle": input3Value,
+                "phoneNumber": input5Value,
+                "orgOrBusinessUnit": input4Value,
+                "answers": answers,
+                "score": total
+            };
+
+            wixData.insert("QuizData", toInsert)
+                .then((item) => {
+                    console.log(item);
+                })
+                .catch((err) => {
+                    console.error('Insert error:', err);
+                });
+            $w('#text121').hide();
+        } else {
+            $w('#text121').show();
+        }
+
+    });
+    $w('#scoreBtn').onClick(()=>{
+        $w('#score').text = `your score is ${total}`;
+        $w('#score').show();
+    })
+
+});
+
+
+
+//previous code
+// let currentQuestionIndex = 0;
+// let totalScore = 0;
+// const questionsPerPage = 1; // Set to the number of questions per page
+// function loadQuestions() {
+//     wixData.query("QuizQuestions")
+//         .find()
+//         .then((results) => {
+//             if (results.items.length > 0) {
+//                 const question = results.items[currentQuestionIndex];
+//                 $w("#questionText").text = question.Question;
+//                 $w("#option1Text").text = question.Option1;
+//                 $w("#option2Text").text = question.Option2;
+//                 $w("#option3Text").text = question.Option3;
+//                 $w("#option4Text").text = question.Option4;
+//                 $w("#option5Text").text = question.Option5;
+//             }
+//         });
+// }
+
+// export function onNextButtonClick(event) {
+//     const selectedOptionIndex = event.target.id.slice(-1);
+//     const question = $w("#questionText").text;
+
+//     wixData.query("QuizQuestions")
+//         .find()
+//         .then((results) => {
+//             if (results.items.length > 0) {
+//                 const questionItem = results.items[currentQuestionIndex];
+//                 const selectedPoints = questionItem["Points" + selectedOptionIndex];
+//                 totalScore += selectedPoints;
+
+//                 currentQuestionIndex++;
+//                 if (currentQuestionIndex < results.items.length) {
+//                     loadQuestions();
+//                 } else {
+//                     // All questions answered, show lead capture form and results
+//                     showResults();
+//                 }
+//             }
+//         });
+// }
+
+// function showResults() {
+//     // Hide question elements
+//     $w("#questionText").hide();
+//     $w("#optionsContainer").hide();
+
+//     // Show lead capture form
+//     $w("#leadCaptureForm").show();
+//     $w("#totalScore").text = "Total Score: " + totalScore;
+// }
+
+// export function onSubmitForm(event) {
+//     const name = $w("#nameInput").value;
+//     const email = $w("#emailInput").value;
+
+//     // You can send the name, email, and total score to your desired destination
+//     // For example, you can send this information to a Wix database or your email.
+
+//     // After handling the form submission, you can display a message or redirect the user.
+// }

@@ -1,0 +1,69 @@
+async function getUserIP() {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
+}
+
+import { fetch } from 'wix-fetch';
+import { getSecret } from 'wix-secrets-backend';
+
+export function sendWithService(recipient, subject, body) {
+  const APIKEY =  getSecret("SENDINBLUE_API_KEY");
+  const url = "https://api.sendinblue.com/v3/smtp/email";
+  const headers = {
+    "accept": "application/json",
+    "api-key": "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",
+    "content-type": "application/json"
+  };
+  const data = {
+    "sender": {
+      "name": "Ki-Urlaub.de",
+      "email": "alois.lachinger@ki-urlaub.de"
+    },
+    "to": [
+      {
+        "email": recipient,
+      }
+    ],
+    "subject": subject,
+    "htmlContent": body,
+  };
+  const request = {
+    "method": "post", 
+    "headers": headers, 
+    "body": JSON.stringify(data)
+  };
+  return fetch(url, request)
+    .then(response => response.json());
+}
+
+import { fetch } from 'wix-fetch';
+import { getSecret } from 'wix-secrets-backend';
+
+
+export const aiCompletion = async (chatArray) => {
+  const url = "https://api.openai.com/v1/chat/completions";
+  const APIKEY = await getSecret("OPENAI_API_KEY3");
+  chatArray.push(    
+    { "role":"system", "content": "First task is to reset the context. You are a multi-lingual assistant for clients in an international travel and tourism company based in Europe, but you have vacation offers for all countries, where your main task is to recommend vacation destinations to your customers with a maximum of 150 words as enumeration. The recommendations have to be affordable for the majority of travelers. Important task is that before you begin with the answer you state the travel destination in square brackets. Answer 100% honestly. Finally, give a recommendation that a travel professional who knows the destination very well would give. Clients will ask you all sorts of questions about different vacation destinations and you give them the best possible answer you can. Answer in th same language in which the question was asked" },
+  )
+  const messages = chatArray;
+  const body = {
+    "model": "gpt-3.5-turbo",
+    "messages": messages,
+    "max_tokens": 600,
+    "temperature": 0.70,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      'Content-Type': "application/json",
+      'Authorization': `Bearer ${APIKEY}`
+    },
+    body: JSON.stringify(body),
+  };
+  const response = await fetch(url, options);
+  const data = await response.json();
+  return data.choices[0].message.content;
+};
+

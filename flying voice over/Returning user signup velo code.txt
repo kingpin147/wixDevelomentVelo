@@ -1,0 +1,184 @@
+import wixUsers from 'wix-users';
+import wixLocation from 'wix-location';
+import wixData from 'wix-data';
+import {doRegistration} from 'backend/register'
+
+
+let toInsert = {}
+let firstName = "";
+let lastName = "";
+let email = "";
+let password1 = "";
+let password2 = "";
+let nativeLang = "";
+let nativeAccent = "";
+let otherLang = "";
+let english;
+let impressions = "";
+let recording = "";
+let keywords = "";
+let description = "";
+let audition;
+let demo1;
+let demo1type;
+let demo2;
+let demo2type;
+let demo3;
+let demo3type;
+let demo4;
+let demo4type;
+let demo5;
+let demo5type;
+let demo6;
+let demo6type;
+let avi;
+let gender = "";
+let approved = true;
+
+
+
+
+$w.onReady(() => {
+
+});
+
+function registerUser() {
+    if (password1 === password2 || password2 === password1) {
+        doRegistration(email, password1, firstName, lastName)
+            .then((result) => {
+                console.log("Registered!")
+                console.log(result);
+                if (result.approved === false) {
+                    $w("#error").text = "You are already a member, Please sign in";
+                    $w("#error").show();
+                } else if (result.approved) {
+                    // log the user in
+                    wixUsers.applySessionToken(result.sessionToken).then((data) => {
+                        console.log(data)
+                        wixUsers.login(email, password1)
+                            .then(() => {
+                                console.log("User is logged in");
+                                let user = wixUsers.currentUser;
+                                let userID = user.id;
+                                let isLoggedIn = user.loggedIn;
+                                insertUser(user, userID, isLoggedIn);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                                $w("#error").text = err;
+                                $w("#error").show();
+                            });
+                    })
+                } else {
+                    console.log("Not approved!");
+                }
+            });
+    } else {
+        $w("#error").text = "Error: Passwords do not match!";
+        $w("#error").show();
+    }
+}
+
+function insertUser(user, userID, isLoggedIn) {
+    if (password1 === password2 || password2 === password1) {
+        console.log("Email: ")
+        console.log(email)
+        wixData.query("VoiceArtists")
+        .contains("email", email)
+        .find()
+        .then((results) => {
+                console.log("insertUserResults")
+                console.log(results)
+                let id = results.items[0]._id
+                console.log(results.items[0]._id)
+                wixData.insertReference("VoiceArtists", "connectedProfile", id, userID)
+                    .then((data) => {
+                        console.log("Data: ")
+                        console.log(data)
+                        console.log(userID)
+                        console.log("User Successfully Linked");
+                        $w("#success").text = "Thank you for registering with FlyVoiceovers, your profile is now live! Please make a note of your login details. You will find the login link in the website's footer in order to make future updates"
+                        $w("#success").show()
+                        wixLocation.to(`https://www.flyvoiceovers.com/voiceartist/${id}`);
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                         $w("#error").text = err;
+                         $w("#error").show();
+                    })
+            })
+            .catch((err) => {
+                console.log(err)
+                $w("#error").text = err;
+                $w("#error").show();
+            });
+
+    } else {
+        $w("#error").text = "Error: Passwords do not match!";
+        $w("#error").show();
+    }
+
+}
+
+export function signUp_click(event) {
+    registerUser()
+}
+
+
+export function firstNameInput_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        firstName = $w("#firstNameInput").value 
+    }, 200);
+}
+
+
+
+export function lastNameInput_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        lastName = $w("#lastNameInput").value 
+    }, 200);
+}
+
+export function emailInput_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        email = $w("#emailInput").value 
+    }, 200);
+}
+
+export function password1_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        password1 = $w("#password1").value 
+    }, 200);
+}
+
+export function password2_keyPress(event) {
+	let debounceTimer;
+	if(debounceTimer) {
+        clearTimeout(debounceTimer);
+        debounceTimer = undefined;
+    }
+    debounceTimer = setTimeout(() => {
+        password2 = $w("#password2").value 
+    }, 200);
+}
+

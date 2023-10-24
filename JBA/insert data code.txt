@@ -1,0 +1,19 @@
+import wixData from 'wix-data';
+
+export function dropdown1_change(event) {
+  // This function is triggered when the dropdown value changes
+  const newRating = parseInt($w('#dropdown1').value);
+
+  // Create a new item with the selected rating and save it to the dataset
+  let toInsert = {
+    "numberOfRatingsSubmitted": newRating
+  };
+  
+  wixData.insert("ratings", toInsert)
+    .then(() => {
+      console.log('New rating saved to database');
+    })
+    .catch((err) => {
+      console.log('Could not save new rating: ' + err);
+    });
+}

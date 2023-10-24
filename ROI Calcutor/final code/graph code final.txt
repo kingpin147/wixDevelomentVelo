@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Charts</title>
+   <!-- Include Chart.js library -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body onload="ready()">
+  <!-- Create a canvas element for the chart -->
+  <canvas id="myChart" width="550 px" height="300 px"></canvas>
+
+  <script>
+    // Define the chart globally
+    let myChart;
+
+    // Wait for the document to load
+    function ready() {
+      const ctx = document.getElementById('myChart').getContext('2d');
+
+      myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['1st year', '2nd year', '3rd year', '4th year', '5th year', '6th year', '7th year'],
+          datasets: [
+            {
+              label: 'Expense',
+              data: [],
+              backgroundColor: 'rgba(245, 219, 122, 1)',
+              borderColor: 'rgba(245, 219, 122, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Income',
+              data: [],
+              backgroundColor: 'rgba(102, 96, 151, 1)',
+              borderColor: 'rgba(132, 116, 232, 1)',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      function handleClick(e) {
+        var activeBars = myChart.getElementAtEvent(e);
+        if (activeBars.length > 0) {
+          var value1 = myChart.data.datasets[0].data[activeBars[0]._index];
+          var value2 = myChart.data.datasets[1].data[activeBars[0]._index];
+          var label = activeBars[0]._model.label;
+          window.parent.postMessage({
+            "type": "click",
+            "Label": label,
+            "value1": value1,
+            "value2": value2
+          }, "*");
+        }
+      }
+
+      // Attach the click event listener to the canvas element
+      ctx.canvas.addEventListener('click', handleClick);
+
+      window.onmessage = function(event) {
+        if (Array.isArray(event.data)) {
+          let tableArr = event.data[0];
+          let tableArr2 = event.data[1];
+          myChart.data.labels = tableArr.map((_, index) => `Year ${index + 1}`);
+          myChart.data.datasets[0].data = tableArr;
+          myChart.data.datasets[1].data = tableArr2;
+          myChart.update();
+        } else {
+          console.log("HTML Element received a generic message:");
+          console.log(event.data);
+        }
+      };
+
+      // Send a 'ready' message to the parent window
+      window.parent.postMessage({"type": "ready"}, "*");
+    }
+  </script>  
+</body>
+</html>

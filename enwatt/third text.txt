@@ -1,0 +1,72 @@
+import {GetDistance} from "backend/opencagegeocodingapi";
+import wixLocation from 'wix-location';
+import wixWindow from 'wix-window';
+import { fetch } from 'wix-fetch'
+
+
+let dropdown = $w('#dropdown5');
+let distance = 60;
+let shipingCost = 0;
+let dropdownValue = dropdown.value;
+
+$w.onReady(function(){
+  
+  
+
+  let populateCoordinates = async () => {
+    try {
+         const defaultCoordinates = [48.775556, 9.182778]; // [latitude, longitude]
+      // get the coordinates of the address from the backend API
+     let a = await GetDistance($w('#input33').value, defaultCoordinates)
+        console.log(a);
+      
+    } catch(err) {
+      console.error(err);
+    }
+
+  populateCoordinates();
+ 
+  let getShipingcost = ()  =>{
+     if (distance <= 45) {
+        return shipingCost = 30;
+      } else {
+        return shipingCost = 30 + (distance - 45) * 1;
+      }
+  }
+getShipingcost();
+// calculate the total cost based on the selected dropdown option and shipping cost
+  };
+let calculateTotalCost = () => {
+    // get the selected dropdown option and shipping cost
+   
+   console.log(dropdownValue);
+  
+
+    let costPerPiece = (() => {
+        if (dropdownValue <= '6') {
+            return 175;
+        } else if (dropdownValue >= '7'|| dropdownValue <= '12') {
+            return 170;
+        } else if (dropdownValue >= '13'|| dropdownValue <= '24') {
+            return 165;
+        } else if (dropdownValue >= '25'|| dropdownValue <= '35') {
+            return 160;
+        } else {
+            return 155;
+        }
+    })();
+
+    console.log(costPerPiece);
+    let itemsCost =  costPerPiece; 
+     let totalCost = itemsCost + shipingCost ;
+    
+    
+    console.log(totalCost);
+    dropdown.onChange(() => calculateTotalCost());
+    calculateTotalCost();
+    $w("#text163").text = Number(totalCost.toFixed(2)) + " €";
+}    
+      
+});
+
+

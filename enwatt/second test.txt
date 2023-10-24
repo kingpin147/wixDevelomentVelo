@@ -1,0 +1,138 @@
+
+import {getSecret} from 'wix-secrets-backend';
+import {fetch} from 'wix-fetch';
+var md5 = require ("blueimp-md5");
+
+
+
+
+
+
+export const getCoordinates = async () => {
+    const q = "q=Stuttgart,+Baden-W%C3%BCrttemberg,+Germany";
+    const key = "3ecbc2e207044497a8bb354fdf5531b7";
+    const privateKey = await getSecret("OpenCageGeocodingAPI");
+
+    const hash = md5(q + key + privateKey);
+
+    const url = `https://api.opencagedata.com/geocode/v1/json?${q}&key=${key}&language=en&pretty=1`;
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    const { lat, lng } = data.results[0].geometry;
+
+    return { lat, lng };
+}
+/////////////////////////
+
+import {getCoordinates} from "backend/opencagegeocodingapi";
+
+$w.onReady(function(){
+  const userInputAddress = $w("#input33").value;
+  let shippingCost = 0;
+
+  const populateCoordinates = async () => {
+    try {
+      // get the user's input address from the input field
+      // if the input is empty, set it to the default address
+      const address = userInputAddress ? userInputAddress : "Stuttgart, Baden-Württemberg, Germany";
+      // get the coordinates of the address from the backend API
+      const coordinates = await getCoordinates(address);
+      // log the coordinates to the console
+      console.log(coordinates);
+      // calculate the shipping cost based on the distance from the default location
+      const defaultCoordinates = [48.775556, 9.182778]; // [latitude, longitude]
+	  
+      const distance = getDistance(defaultCoordinates, coordinates);
+      console.log(`distance: ${distance}`);
+      if (distance <= 45) {
+        shippingCost = 30;
+      } else {
+        shippingCost = 30 + (distance - 45) * 1;
+      }
+      // display the shipping cost to the user
+ $w("#text163").text = Number(shippingCost.toFixed(2)) + " €";
+
+    } catch(err) {
+      console.error(err);
+    }
+  };
+  populateCoordinates();
+ function getDistance(coord1, coord2) {
+    const lat1 = parseFloat(coord1.lat);
+    const lon1 = parseFloat(coord1.lng);
+    const lat2 = parseFloat(coord2.lat);
+    const lon2 = parseFloat(coord2.lng);
+    const R = 6371; // earth radius in km
+
+    if (isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) {
+        return NaN; // return NaN if any coordinate is missing or invalid
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // earth radius in km
+const dLat = (lat2 - lat1) * Math.PI / 180;
+const dLon = (lon2 - lon1) * Math.PI / 180;
+const a =
+    0.5 - Math.cos(dLat) / 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    (1 - Math.cos(dLon)) / 2;
+return R * 2 * Math.asin(Math.sqrt(a));
+}
+console.log(calculateDistance());
+}
+
+  const dropdown = $w('#dropdown5');
+const totalCostField = $w('#text163');
+
+// calculate the total cost based on the selected dropdown option and shipping cost
+const calculateTotalCost = () => {
+    // get the selected dropdown option and shipping cost
+    const dropdownValue = dropdown.value;
+        const distance = Number(isNaN($w('#input33').value) ? 0 : +$w('#input33').value);
+
+    const costPerPiece = (() => {
+        if (dropdownValue === '1-6 pieces') {
+            return 175;
+        } else if (dropdownValue === '7-12 pieces') {
+            return 170;
+        } else if (dropdownValue === '13-24 pieces') {
+            return 165;
+        } else if (dropdownValue === '25-35 pieces') {
+            return 160;
+        } else {
+            return 155;
+        }
+    })();
+    const totalCost = costPerPiece * distance + shippingCost;
+    console.log(`costPerPiece: ${costPerPiece}`);
+    console.log(`shippingCost: ${shippingCost}`);
+    console.log(`totalCost: ${totalCost}`);
+    console.log(`shippingCost: ${shippingCost}`);
+    // set the total cost field value
+    totalCostField.text = `${totalCost.toFixed(2)} €`;
+};
+
+// calculate the total cost when the dropdown value or input field value changes
+dropdown.onChange(() => calculateTotalCost());
+  $w('#input33').onChange(() => {
+    
+    console.log(`dropdownValue: ${'dropdown'}`);
+    populateCoordinates();
+    calculateTotalCost();
+    
+  });
+  
+  // calculate the total cost when the page loads
+  $w.onReady(() => calculateTotalCost());
+});
+
+
+
+
+
+
+
+

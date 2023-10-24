@@ -1,0 +1,504 @@
+import { contacts } from 'wix-crm';
+import { triggeredEmails } from 'wix-crm';
+import { currentMember } from 'wix-members';
+import wixUsers from 'wix-users';
+import wixData from 'wix-data';
+
+let a = null,
+    b = null,
+    c = null,
+    d = null,
+    e = null,
+    f = null,
+    g = null,
+    h = null,
+    i = null,
+    j = null,
+    k = null,
+    l = null,
+    m = null,
+    n = null,
+    o = null,
+    p = null,
+    q = null,
+    r=null;
+
+$w.onReady(function () {
+    const emailInput = $w("#email");
+
+    // Add a click event listener to the input field
+    emailInput.onChange(() => {
+        // Get the value of the email input field
+        const inputValue = $w("#email").value;
+        if(inputValue==null){
+             $w('#submit').disable();
+        }
+        else{
+            $w('#submit').enable();
+        }
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+        // Define a regular expression pattern for email validation
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Check if the input value matches the email pattern
+        if (emailPattern.test(inputValue)) {
+            // Valid email format
+            console.log("Valid email format");
+            $w('#submit').enable();
+        } else {
+            // Invalid email format
+            console.log("Invalid email format");
+            $w('#submit').disable();
+        }
+    });
+    //next button
+    $w('#next').onClick(() => {
+        if ($w('#tabBox').currentState.id == $w('#tab1').id) {
+            $w('#tabBox').changeState('tab3');
+        } else if ($w('#tabBox').currentState.id == $w('#tab2').id) {
+            $w('#tabBox').changeState('tab4');
+        } else if ($w('#tabBox').currentState.id == $w('#tab3').id) {
+            $w('#tabBox').changeState('tab5');
+        } else if ($w('#tabBox').currentState.id == $w('#tab4').id) {
+            $w('#tabBox').changeState('tab6');
+        } else if ($w('#tabBox').currentState.id == $w('#tab5').id) {
+            $w('#tabBox').changeState('tab7');
+        } else if ($w('#tabBox').currentState.id == $w('#tab6').id) {
+            $w('#submit').show();
+            $w('#next').hide();
+            $w('#tabBox').changeState('tab7');
+
+        } else {
+            const currentState = $w('#tabBox').currentState.id;
+            console.log(currentState);
+            const stateNumber1 = Number(currentState.slice(-1));
+            const nextState = `tab${stateNumber1 + 1}`; // Use backticks for string interpolation
+            console.log(`tab${stateNumber1 + 1}`);
+            //console.log(currentState, stateNumber1, nextState);
+            $w('#tabBox').changeState(nextState); // Remove the quotes around nextState}
+        }
+    });
+    //back button
+    $w('#back').onClick(() => {
+        if ($w('#tabBox').currentState.id == $w('#tab6').id) {
+            $w('#tabBox').changeState('tab4');
+            $w('#submit').hide();
+        }else if ($w('#tabBox').currentState.id == $w('#tab5').id) {
+            $w('#tabBox').changeState('tab3');
+            $w('#submit').hide();
+        }else if ($w('#tabBox').currentState.id == $w('#tab4').id) {
+            $w('#tabBox').changeState('tab2');
+            $w('#submit').hide();
+        }else if ($w('#tabBox').currentState.id == $w('#tab3').id) {
+            $w('#tabBox').changeState('tab1');
+            $w('#submit').hide();
+        }else if ($w('#tabBox').currentState.id == $w('#tab2').id) {
+            $w('#tabBox').changeState('tab0');
+            $w('#submit').hide();
+        }else  if ($w('#tabBox').currentState.id == $w('#tab1').id) {
+            $w('#tabBox').changeState('tab0');
+            $w('#submit').hide();
+        }else if(r==0){
+            $w('#tabBox').changeState('tab6');
+            $w('#submit').hide();
+
+        }else if(r==1){
+            $w('#tabBox').changeState('tab5');
+            $w('#submit').hide();
+
+        }else{
+            const currentState = $w('#tabBox').currentState.id;
+            console.log(currentState);
+            const stateNumber = Number(currentState.slice(-1));
+            const nextState = `tab${stateNumber - 1}`;
+            console.log(`tab${stateNumber - 1}`); // Use backticks for string interpolation
+            //console.log(currentState, stateNumber, nextState);
+            $w('#tabBox').changeState(nextState); // Remove the quotes around nextState
+            $w('#submit').hide();
+            $w('#next').show();
+        }
+    });
+    //question 1
+    $w('#q1c1').onClick(() => {
+        $w('#tabBox').changeState($w('#tab1').id);
+        $w('#back').enable();
+        a = "Seeking a career that provides fulfilment (and financial security)";
+    });
+    $w('#q1c2').onClick(() => {
+        $w('#tabBox').changeState($w('#tab2').id);
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+        a = "A solopreneur looking to build an empire.";
+    });
+    $w('#q2c1').onClick(() => {
+        $w('#tq2c2').hide();
+        $w('#tabBox').changeState($w('#tab3').id);
+        if ($w('#tq2c2').hidden) {
+            $w('#tq2c1').show();
+            b = "I'm clear on the change I'm striving to make in the world";
+        } else {
+            $w('#tq2c1').hide();
+            b = null;
+        }
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    //question 2
+    $w('#q2c2').onClick(() => {
+        $w('#tq2c1').hide();
+        $w('#tabBox').changeState($w('#tab3').id);
+        if ($w('#tq2c1').hidden) {
+            $w('#tq2c2').show();
+            c = "I work because I get paid";
+        } else {
+            $w('#tq2c2').hide();
+            c = null;
+        }
+        
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    //question 3
+    $w('#q3c1').onClick(() => {
+        $w('#tq3c2').hide();
+        $w('#tabBox').changeState($w('#tab4').id);
+        //$w('#tabBox').changeState($w('#tab2').id);
+        if ($w('#tq3c1').hidden) {
+            $w('#tq3c1').show();
+            d = "I'm starting my journey as Solopreneur";
+        } else {
+            $w('#tq3c1').hide();
+            d = null;
+        }
+        
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q3c2').onClick(() => {
+        $w('#tq3c1').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab4').id);
+        if ($w('#tq3c2').hidden) {
+            $w('#tq3c2').show();
+            e = "I've been playing the Solopreneur game for  years";
+        } else {
+            $w('#tq3c2').hide();
+            e = null;
+        }
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+
+    //question 4
+    $w('#q4c1').onClick(() => {
+        $w('#tq4c2').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab5').id);
+        if ($w('#tq4c1').hidden) {
+            $w('#tq4c1').show();
+            f = "I feel fulfilled by my work.";
+        } else {
+            $w('#tq4c1').hide();
+            f = null;
+        }
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q4c2').onClick(() => {
+        $w('#tq4c1').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab5').id);
+        if ($w('#tq4c2').hidden) {
+            $w('#tq4c2').show();
+            g = "I feel lost in my work";
+        } else {
+            $w('#tq4c2').hide();
+            g = null;
+        }
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    //question 5
+    $w('#q6c1').onClick(() => {
+        $w('#tq6c2').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab6').id);
+        if ($w('#tq6c1').hidden) {
+            $w('#tq6c1').show();
+            h = "I've got a grand plan but progress is slow.";
+        } else {
+            $w('#tq6c1').hide();
+            h = null;
+        }
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q6c2').onClick(() => {
+        $w('#tq6c1').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab6').id);
+        if ($w('#tq6c2').hidden) {
+            $w('#tq6c2').show();
+            i = "I'm happy with how business is progressing.";
+        } else {
+            $w('#tq6c2').hide();
+            i = null;
+        }
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    //question 6
+    $w('#q7c1').onClick(() => {
+        $w('#tq7c2').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab7').id);
+        if ($w('#tq7c1').hidden) {
+            $w('#tq7c1').show();
+            j = "I'm clear on my dream role & company.";
+            r=1;
+        } else {
+            $w('#tq7c1').hide();
+            j = null;
+        }
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q7c2').onClick(() => {
+        $w('#tq7c1').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab7').id);
+        r=1;
+        if ($w('#tq7c2').hidden) {
+            $w('#tq7c2').show();
+            k = "I'm uncertain what the future looks like.";
+        } else {
+            $w('#tq7c2').hide();
+            k = null;
+        }
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    //question 8
+    $w('#q8c1').onClick(() => {
+        $w('#tq8c2').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab7').id);
+        r=0;
+        if ($w('#tq8c1').hidden) {
+            $w('#tq8c1').show();
+            l = "Securing clients is a constant wrestle.";
+        } else {
+            $w('#tq8c1').hide();
+            l = null;
+        }
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q8c2').onClick(() => {
+        $w('#tq8c1').hide();
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab7').id);
+        r=0;
+        if ($w('#tq8c2').hidden) {
+            $w('#tq8c2').show();
+            m = "Securing clients is a constant wrestle.";
+        } else {
+            $w('#tq8c2').hide();
+            m = null;
+        }
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q5c1').onClick(() => {
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab9').id);
+        if ($w('#tq5c1').hidden) {
+            $w('#tq5c1').show();
+            n = "Stagnate and frustrated by progress";
+
+        } else {
+            $w('#tq5c1').hide();
+            n = null;
+        }
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+    $w('#q5c2').onClick(() => {
+        //$w('#tabBox').changeState($w('#tab2').id);
+        $w('#tabBox').changeState($w('#tab9').id);
+        if ($w('#tq5c2').hidden) {
+            $w('#tq5c2').show();
+            o = "I'm all set";
+        } else {
+            $w('#tq5c2').hide();
+            o = null;
+        }
+        $w('#next').enable();
+        $w('#back').enable();
+        if ($w('#tabBox').currentState.id == $w('#tab0').id) {
+            $w('#next').disable();
+            $w('#back').disable();
+        }
+    });
+
+    $w('#sure').onClick(() => {
+
+        $w('#tabBox').changeState('tab8');
+        p = "Sure";
+
+    });
+    $w('#maybe').onClick(() => {
+        $w('#tabBox').changeState('tab9');
+        $w('#submit').show();
+        $w('#next').hide();
+        p = "maybe one day";
+    });
+
+    //trigered email
+
+    $w('#submit').onClick(() => {
+        // Disable the submit button
+        $w('#submit').disable();
+        $w('#back').disable();
+        q = $w('#email').value;
+        let toInsert = {
+            "q1Choice1": a,
+            "vq2c1": b,
+            "vq2c2": c,
+            "vq3c1": d,
+            "vq3c2": e,
+            "vq4c1": f,
+            "vq4c2": g,
+            "vq6c1": h,
+            "vq6c2": i,
+            "vq7c1": j,
+            "vq7c2": k,
+            "vq8c1": l,
+            "vq8c2": m,
+            "q5Choice1": n,
+            "q5Choice2": o,
+            "sure": p,
+            "email": q,
+
+        };
+
+        wixData.insert("Quiz", toInsert)
+            .then((item) => {
+                console.log(item); //see item below
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        const contactInfo = {
+            emails: [{
+                email: $w('#email').value
+            }]
+        };
+        const my_Id = wixUsers.currentUser.id;
+
+        console.log(my_Id);
+        contacts.appendOrCreateContact(contactInfo)
+            .then((resolvedContact) => {
+                // Check if resolvedContact is not null or undefined
+                if (resolvedContact) {
+
+                    // Sending consultation email to the newly created contact
+                    triggeredEmails.emailContact('TosRwb7', resolvedContact.contactId)
+                        .then(() => {
+                            console.log("Goodies email sent to new contact.");
+                        })
+                        .catch((error) => {
+                            console.error("Error sending consultation email to new contact:", error);
+                        });
+
+                    // const my_id2 = $w('#email').value;
+                    triggeredEmails.emailContact('TosRwb7', my_Id)
+                        .then(() => {
+                            console.log("Goodies email sent to member.");
+                        })
+                        .catch((error) => {
+                            console.error("Error sending consultation email to member:", error);
+                        });
+                }
+
+                console.log(resolvedContact);
+            })
+            .catch((error) => {
+                console.error("Error appending or creating contact:", error);
+            })
+            .finally(() => {
+                // Enable the submit button after 3 seconds
+                setTimeout(() => {
+                    $w('#submit').enable();
+
+                    // Change the state to 'tab6' after another 3 seconds
+                    setTimeout(() => {
+                        $w('#tabBox').changeState('tab10');
+                        $w('#next').hide();
+                        $w('#back').hide();
+                        $w('#submit').hide();
+
+                    }, 500);
+                }, 500);
+            });
+    });
+
+});

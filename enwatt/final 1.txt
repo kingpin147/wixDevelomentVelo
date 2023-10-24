@@ -1,0 +1,116 @@
+import { GetDistance } from "backend/opencagegeocodingapi";
+import wixLocation from 'wix-location';
+import wixWindow from 'wix-window';
+import { fetch } from 'wix-fetch';
+
+let dropdown = $w('#dropdown5');
+let dropdown2 = $w('#dropdown4');
+let distance = 0;
+let costPerPiece = 0;
+let shippingCost = 0;
+let dropdownValue = dropdown.value;
+let dropdownValue2 = "Abholung";
+let address = $w('#input33');
+let postal = $w('#input34');
+
+$w.onReady(function () {
+    let populateCoordinates = async () => {
+        try {
+            const defaultCoordinates = [48.775556, 9.182778]; // [latitude, longitude]
+            // get the coordinates of the address from the backend API
+            let result = await GetDistance($w('#input33').value, defaultCoordinates)
+
+            // convert the distance text to a number
+            distance = parseFloat(result.distance);
+            console.log(result);
+            console.log(distance);
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+let getShippingCost = () => {
+    // if address input string contains Stuttgart or its postal code, then shipping cost is zero
+    if (address.value.toLowerCase() === "stuttgart" || /^\d+$/.test(postal.value) && ["70173", "70174", "70176", "70178", "70180", "70182", "70184", "70186", "70188", "70190", "70191", "70192", "70193", "70195", "70197", "70199", "70327", "70329", "70374", "70376"].includes(postal.value)) {
+        shippingCost = 0;
+    } else if (distance <= 45) {
+        shippingCost = 30;
+    } else {
+        shippingCost = 30 + (distance - 45) * 1;
+    }
+}
+
+
+
+    let calculateTotalCost = () => {
+        // get the selected dropdown option and shipping cost
+        console.log("value : " +  $w('#dropdown4').value);
+        getShippingCost();
+        dropdownValue = dropdown.value;
+        console.log(dropdownValue);
+
+
+        function calculateCostPerPiece(dropdownValue) {
+
+            if (dropdownValue <= 6) {
+                costPerPiece = 175;
+                return costPerPiece * dropdownValue;
+            } else if (dropdownValue >= 7 && dropdownValue <= 12) {
+                costPerPiece = 170;
+                return costPerPiece * dropdownValue;
+            } else if (dropdownValue >= 13 && dropdownValue <= 24) {
+                costPerPiece = 165;
+                return costPerPiece * dropdownValue;
+            } else if (dropdownValue >= 25 && dropdownValue <= 35) {
+                costPerPiece = 160;
+                return costPerPiece * dropdownValue;
+            } else {
+                costPerPiece = 155;
+                return costPerPiece * dropdownValue;
+            }
+        }
+
+
+        let itemsCost = calculateCostPerPiece(dropdownValue);
+        console.log(itemsCost);
+        console.log(shippingCost);
+
+        let totalCost = 0;
+        if (dropdownValue2 === "Lieferung") {
+            totalCost = itemsCost;
+            console.log(totalCost);
+            $w("#input37").value = shippingCost.toFixed(2)+ " €"  ;
+            dropdown2.onChange(() => {
+            dropdownValue2 = dropdown2.value;
+            calculateTotalCost();
+            });
+        }
+        else {
+            totalCost = itemsCost;
+             console.log(totalCost);
+             $w("#input35").value = totalCost.toFixed(2) + " €";
+                shippingCost = 0 ;
+             $w("#input37").value = shippingCost.toFixed(2)+ " €"  
+             dropdown2.onChange(() => {
+            dropdownValue2 = dropdown2.value;
+            calculateTotalCost();
+             });
+        }
+            console.log(totalCost);
+
+
+    }
+
+
+    $w('#input33').onChange(() => populateCoordinates());
+    dropdown.onChange(() => {
+     dropdownValue = dropdown.value;
+     calculateTotalCost();
+ });
+ dropdown2.onChange(() => {
+     dropdownValue2 = dropdown2.value;
+     calculateTotalCost();
+ });
+
+});

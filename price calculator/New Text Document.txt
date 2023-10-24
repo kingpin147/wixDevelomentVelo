@@ -1,0 +1,210 @@
+import wixPay from 'wix-pay';
+var service = 0;
+var sqFoot = 0;
+var discountCode;
+var value = 0;
+
+$w.onReady(function () {
+
+    let quoteSummary_Arr = [];
+    let web_price_Arr = [];
+
+    let pages_Num_Arr = [];
+    pages_Num_Arr[0] = 1;
+
+    quoteSummary_Arr[0] = "🕛 Regular Deliver";
+
+    let price;
+
+    //DROPDOWN CALCULATION
+    $w("#websiteTypeDropdown").onChange(() => {
+
+calculator();
+
+        let webTypeDrop = $w("#websiteTypeDropdown").value;
+
+        if (webTypeDrop === "1000") {
+            quoteSummary_Arr[1] = "🍪 Standard Website";
+            web_price_Arr[0] = 1000;
+            calculator();
+        } else if (webTypeDrop === "1500") {
+            quoteSummary_Arr[1] = "🛒 E-commerce Website";
+            web_price_Arr[0] = 1500;
+            calculator();
+        } else if (webTypeDrop === "5000") {
+            quoteSummary_Arr[1] = "🎯 Advance Website";
+            web_price_Arr[0] = 5000;
+            calculator();
+        } else {
+            quoteSummary_Arr.splice(1, 1);
+            web_price_Arr.splice(0, 1)
+        }
+
+    });
+
+    //TEXT INPUT CALCULATION
+    $w("#numberPages").onInput(() => {
+
+        calculator();
+
+        pages_Num_Arr[0] = $w("#numberPages").value;
+
+        if ($w("#numberPages").value.length > 0) {
+            quoteSummary_Arr[2] = `🧾 ${pages_Num_Arr[0]} page(s)`;
+            calculator();
+        } else {
+            quoteSummary_Arr.splice(2, 1);
+            calculator();
+        }
+
+    });
+
+
+    //ADDONS & FEATURES 🎉
+    $w("#featuresCheckboxGroup").onChange((event) => {
+
+        let selected_Addon = Number($w("#featuresCheckboxGroup").selectedIndices);
+        let new_Add_Arr = $w("#featuresCheckboxGroup").value;
+
+        console.log(new_Add_Arr)
+        calculator();
+
+        //REPLACE THE VALUE WITH STRINGS
+        for (selected_Addon = 0; selected_Addon < new_Add_Arr.length; selected_Addon++) {
+            if (new_Add_Arr[selected_Addon] === "50") {
+                new_Add_Arr.splice(selected_Addon, 1, "Live Chat")
+
+            } else if (new_Add_Arr[selected_Addon] === "80") {
+                new_Add_Arr.splice(selected_Addon, 1, "Website Search")
+
+            } else if (new_Add_Arr[selected_Addon] === "45") {
+                new_Add_Arr.splice(selected_Addon, 1, "Automated Email")
+
+            } 
+            
+            quoteSummary_Arr[4] = `⚙️ Addons: ${new_Add_Arr.toString()}`;
+            calculator();
+        }
+
+    });
+
+    //DELIVERY TIME AND SELECT ONE TAG AT A TIME🎉✨
+    $w('#deliveryTimeSelectionTags').onChange((event) => {
+        const selectedTag = $w('#deliveryTimeSelectionTags').value;
+        let selectedIndex = Number($w('#deliveryTimeSelectionTags').selectedIndices);
+
+        calculator();
+
+        for (var i = 0; i < selectedTag.length - 1; i++) {
+            if (selectedTag.length > 1) {
+                selectedTag.shift();
+
+            }
+        }
+
+        setTimeout(() => {
+            $w('#deliveryTimeSelectionTags').value = [];
+            $w('#deliveryTimeSelectionTags').value = selectedTag;
+
+            //REPLACE THE VALUE WITH STRINGS
+            for (selectedIndex = 0; selectedIndex < selectedTag.length; selectedIndex++) {
+                if (selectedTag[selectedIndex] === "0") {
+                    selectedTag.splice(selectedIndex, 1, "Regular Delivery")
+
+                } else if (selectedTag[selectedIndex] === "50") {
+                    selectedTag.splice(selectedIndex, 1, "1 Week")
+
+                } else if (selectedTag[selectedIndex] === "100") {
+                    selectedTag.splice(selectedIndex, 1, "2 Days")
+
+                } else if (selectedTag[selectedIndex] === "150") {
+                    selectedTag.splice(selectedIndex, 1, "24 Hours")
+
+                }
+
+                quoteSummary_Arr[0] = `🕛 ${selectedTag.toString()}`;
+
+            }
+
+            calculator();
+        }, 1)
+
+    });
+
+    //GENERAL CALCULATOR FUNCTION📌
+    const calculator = function () {
+
+        //CALCULATOR🧮
+        price = Number(web_price_Arr.reduce((a, b) => a + b, 0)) + (Number(pages_Num_Arr[0]) * 20) +
+            $w("#featuresCheckboxGroup").value.map(Number).reduce((a, b) => a + b, 0) + $w('#deliveryTimeSelectionTags').value.map(Number).reduce((a, b) => a + b, 0);
+
+        $w("#totalPriceText").text = `$${Number(price).toLocaleString('en-US')}`;
+        $w("#paymentButton").label = `Pay $${Number(price).toLocaleString('en-US')}`;
+
+        //SUMMARY TEXTS📖
+        $w("#quoteSummaryText").text = quoteSummary_Arr.join(" ");
+
+    }
+
+    //VALIDATE ALL FORMS AND ENABLE PAY BUTTON
+    $w("#websiteTypeDropdown, #numberPages, #budgetSlider, #featuresCheckboxGroup, #deliveryTimeSelectionTags").onChange(() => {
+        validateElements();
+    });
+
+    $w("#numberPages").onInput(() => {
+        validateElements();
+    });
+
+    function validateElements() {
+        if ($w("#websiteTypeDropdown").value.length > 0 && $w("#numberPages").value.length > 0 && $w("#budgetlider").min > 0 &&
+            $w("#featuresCheckboxGroup").selectedIndices.length > 0 && $w("#deliveryTimeSelectionTags").selectedIndices.length > 0) {
+            $w("#paymentButton").enable();
+        } else { $w("#paymentButton").disable(); }
+    }
+
+    //RESET CALCULATOR 🤩
+    $w("#resetButton").onClick(function () {
+
+        $w('#deliveryTimeSelectionTags').selectedIndices = [0];
+        $w("#websiteTypeDropdown").selectedIndex = 0;
+        $w("#numberPages").value = "1";
+        $w('#featuresCheckboxGroup').selectedIndices = [];
+      
+
+        $w("#quoteSummaryText").text = "🕛 Regular Delivery";
+        $w("#totalPriceText").text = "$0.00";
+
+    });
+
+   
+});
+
+
+export function service_change(event) {
+	var value = $w("#service").value;
+    service = parseFloat(value);
+    console.log(service);
+}
+
+
+export function input1_change(event) {
+	sqFoot = parseInt($w("#input1").value);
+    console.log(sqFoot)
+}
+
+
+export function checkboxGroup1_change(event) {
+   var selectedIndex = event.target.value;
+   console.log(selectedIndex);
+   discountCode = selectedIndex
+}
+
+
+export function calculate_click(event) {
+    value = 0;
+    for(var i=0; i < discountCode.length; i++){
+       value += parseInt(discountCode[i])
+    }
+   var totalPrice = (sqFoot * service ) - value;
+   $w("#totalPriceText").text = "$" + " " + totalPrice.toString();
+}

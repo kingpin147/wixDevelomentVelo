@@ -1,0 +1,101 @@
+//////////*********************create order backend */
+import * as wixStoresBackend from 'wix-stores-backend';
+
+export async function createOrder(customer,status) {
+    console.log('customer', customer);
+    try {
+        if (!customer || !customer.mycart || !customer.mycart.lineItems || customer.mycart.lineItems.length === 0) {
+            throw new Error('Invalid customer data or cart is empty.');
+        }
+
+        const lineItems = customer.mycart.lineItems.map((item) => ({
+            
+            productId: item.productId,
+            lineItemType: 'PHYSICAL',
+            mediaItem: {
+                altText: 'This is a description of the image',
+                src: item.mediaItem.src,
+            },
+            name: item.name,
+            options: customer.mycart.lineItems[0].options,
+            quantity: item.quantity,
+            sku: '36523641234523',
+            discount: 0,
+            tax: 0,
+            priceData: {
+                price: item.price,
+                taxIncludedInPrice: true,
+            },
+            // color:customer.mycart.options[0].selection,
+            // size:customer.mycart.options[1].selection
+            
+        }
+        
+        ));
+
+        const billingInfo = {
+            address: {
+                formatted: 'New Delhi, Delhi 110020, India',
+                city: 'New Delhi',
+                country:  'IN',
+                addressLine: '110020',
+                postalCode:  '110020',
+                subdivision:  'DL',
+            },
+            firstName: customer.result.userInfo.firstName,
+            email: customer.result.userInfo.email,
+        };
+
+        const shippingInfo = {
+            deliveryOption: customer.result.status,
+            shippingRegion: 'India',
+            shipmentDetails: {
+                address: {
+                    formatted:  'New Delhi, Delhi 110020, India',
+                    city:  'New Delhi',
+                    country:  'IN',
+                    addressLine:  '110020',
+                    postalCode:  '110020',
+                    subdivision:  'DL',
+                },
+                firstName: customer.name,
+                email: customer.email,
+            },
+        };
+        const sub = customer.mycart.lineItems.reduce((acc, curr) => {
+            return acc + curr.totalPrice
+        }, 0)
+        const totalPriceWithShipping = sub + 0
+        console.log('sub', sub, 'total', totalPriceWithShipping);
+        // let fullOrder;
+        // if(customer.shipping > 0) {
+        const fullOrder = {
+            buyerLanguage: 'en',
+            mycartId: customer.mycart._id,
+            currency: 'INR',
+            billingInfo,
+            totals: {
+                subtotal: sub,
+                shipping: customer.shipping || 0,
+                total: totalPriceWithShipping,
+            },
+            channelInfo: {
+                type: 'WEB',
+            },
+           
+            paymentStatus: status,
+            shippingInfo,
+            lineItems,
+        };
+
+        console.log(fullOrder, 'full order');
+
+        const result = await wixStoresBackend.createOrder(fullOrder);
+        console.log(result, 'results');
+
+        return result;
+    } catch (error) {
+        console.error('Error creating order:', error);
+        throw error;
+    }
+}

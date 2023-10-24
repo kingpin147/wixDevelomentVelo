@@ -1,0 +1,32 @@
+import { fetch } from 'wix-fetch';
+const key = "AIzaSyDRHZXxfd-KeA8ALBsGjcWykpp70Mv8MTU";
+
+export async function GetCoord(address) {
+   
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${key}`;
+    
+    try {
+        const response = await fetch(url, { method: 'get' });
+        const result = await response.json();
+        
+        if (result.status === 'OK') {
+            const { lat, lng } = result.results[0].geometry.location;
+            console.log(lat);
+            console.log(lng);
+            return {
+                 lat, lng
+            };
+        } else {
+            return {
+                status: "Failure",
+                message: result.status
+            };
+        }
+    } catch (error) {
+        console.log(error, "error");
+        return {
+            status: "Failure",
+            message: "Invalid Request"
+        };
+    }
+}

@@ -1,0 +1,48 @@
+import {getCoordinates} from "backend/opencagegeocodingapi";
+
+
+$w.onReady (function(){
+
+const populateCoordinates = async ()=>{
+
+			const coordinates1 = getCoordinates();
+			console.log(coordinates1);
+}
+		populateCoordinates();
+
+});
+
+
+
+
+
+
+
+import {getSecret} from 'wix-secrets-backend';
+import {fetch} from 'wix-fetch';
+var md5 = require ("blueimp-md5");
+
+
+
+
+
+
+export const getCoordinates = async()=>
+{
+    const q = "q=Stuttgart,+Baden-W%C3%BCrttemberg,+Germany";
+    const key = "3ecbc2e207044497a8bb354fdf5531b7"; 
+    const privateKey = await getSecret("OpenCageGeocodingAPI");
+
+    const hash = md5(q+key+privateKey);
+
+    const url = 'https://api.opencagedata.com/geocode/v1/json?q=Stuttgart,+Baden-W%C3%BCrttemberg,+Germany&key=3ecbc2e207044497a8bb354fdf5531b7&language=en&pretty=1';
+   
+
+    const response = await fetch(url);
+
+    const coordinates = await response.json();
+    
+
+    return coordinates.data.results;
+}
+
